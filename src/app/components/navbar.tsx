@@ -3,6 +3,7 @@
 import {
   Box,
   Flex,
+  Image,
   Text,
   IconButton,
   Button,
@@ -55,13 +56,12 @@ export default function Navbar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-            fontFamily={'heading'}
-            fontSize='2xl'
-            color={useColorModeValue('gray.800', 'white')}>
-            Slice Scout
-          </Text>
+          <Image
+           width={'150px'}
+           height={'60px'}
+           src="/navbar-slicescouticon.png"
+           alt="Slice Scout Logo"
+          />
         </Flex>
 
         <Stack

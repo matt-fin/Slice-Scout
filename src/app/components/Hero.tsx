@@ -1,7 +1,8 @@
 'use client'
 import { Input } from '@chakra-ui/react';
-
-import Head from 'next/head'
+import SearchBar from './SearchBar';
+import Head from 'next/head';
+import React from 'react';
 import {
   Box,
   Flex,
@@ -40,14 +41,14 @@ export default function Hero() {
             fontWeight={600}
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
             lineHeight={'110%'}>
-            Finding the authentic <br />
+            Find the authentic <br />
             <Text as={'span'} color={'orange.600'}>
-                99¢ Pizza
+              99¢ Pizza
             </Text>
-            &nbsp;
+            &nbsp; 
             near You.
           </Heading>
-          <Text color={'gray.800'} fontSize={'md'}>
+          <Text color={'gray.800'} fontSize={'lg'}>
             Saving New Yorker's wallets, $1 at a time. 
           </Text>
           <Stack
@@ -58,25 +59,8 @@ export default function Hero() {
             position={'relative'}>
             <Stack direction={"column"}
                 spacing={3}
-                align={'center'}
-                width={'100%'}>
-                <Input
-                    placeholder="Search for pizza location near you..."
-                    size="lg"
-                    variant="filled"
-                    focusBorderColor="red"
-                    htmlSize={35}
-                />
-                <Button
-                    colorScheme={'green'}
-                    bg={'red.400'}
-                    rounded={'full'}
-                    px={6}
-                    _hover={{
-                        bg: 'red.300',
-                    }}>
-                    Search
-                </Button>
+                align={'center'}>
+                <SearchBar/>
             </Stack>
           </Stack>
         </Stack>
