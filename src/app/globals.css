@@ -40,3 +40,11 @@ a {
     color-scheme: dark;
   }
 }
+
+input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 300px;
+  font-size: 1rem;
+}
