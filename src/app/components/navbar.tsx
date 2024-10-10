@@ -8,20 +8,12 @@ import {
   IconButton,
   Button,
   Stack,
-  Collapse,
-  Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   useColorModeValue,
-  useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react'
 import {
   HamburgerIcon,
   CloseIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
 } from '@chakra-ui/icons'
 
 export default function Navbar() {
@@ -34,9 +26,8 @@ export default function Navbar() {
         top={0}
         left={0}
         right={0}
-        bg={useColorModeValue('orange.200', 'gray.800')}
-        color={useColorModeValue('red.800', 'white')}
-        minH={'70px'}
+        bg={'orange.200'}
+        maxH={'90px'}
         py={{ base: 2 }}
         px={{ base: 4 }}
         borderBottom={2}
@@ -44,17 +35,6 @@ export default function Navbar() {
         borderColor={useColorModeValue('gray.100', 'gray.900')}
         align={'center'}
         zIndex={1000}>
-        <Flex
-          flex={{ base: 1, md: 'auto' }}
-          ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}>
-          <IconButton
-            onClick={onToggle}
-            icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
-          />
-        </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Image
            width={'150px'}
