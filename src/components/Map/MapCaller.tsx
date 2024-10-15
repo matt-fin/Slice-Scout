@@ -14,10 +14,11 @@ const LazyMap = dynamic(() => import("@/components/Map/Map"), {
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
+    handlePizzeriaSelection: (id: number) => void;
 }
 
-function MapCaller({ pizzerias }: MapProps) {
-    return <LazyMap pizzerias={pizzerias}/>;
+function MapCaller(props: MapProps) {
+    return <LazyMap {...props}/>;
 }
 
 export default MapCaller;

@@ -14,9 +14,10 @@ import * as T from '@/libs/types'
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
+    handlePizzeriaSelection: (id: number) => void;
 }
 
-export default function Map({pizzerias}: MapProps) {
+export default function Map({pizzerias, handlePizzeriaSelection}: MapProps) {
     
     //Can extend Icon to customize further
     const pizzaIcon = new Icon({
@@ -32,6 +33,7 @@ export default function Map({pizzerias}: MapProps) {
                 icon={pizzaIcon}
                 position={[latitude, longitude]}
                 eventHandlers={{
+                    click: () => handlePizzeriaSelection(pizzeria.id),
                     mouseover: (event) => event.target.openPopup(),
                     mouseout: (event) => event.target.closePopup(),
                 }}
