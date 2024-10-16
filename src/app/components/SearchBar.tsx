@@ -1,3 +1,4 @@
+"use client"
 import { Box, Icon, Input, InputGroup, InputLeftElement, Button, Stack, Text } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { useState } from "react";
@@ -6,9 +7,9 @@ import {MdMyLocation} from "react-icons/md"
 
 export default function SearchBar() {
 
-        const [location, setLocation] = useState("");
+        const [searchQuery, setSearchQuery] = useState("");
         const [suggestions, setSuggestions] = useState([]);
-        const [showSuggestions, setShowSuggestions] = useState(false);
+        const [showSearchResults, setShowSearchResults] = useState(false);
 
         {/*insert api here*/}
         const placeholderResults = [
@@ -25,18 +26,25 @@ export default function SearchBar() {
           : [{id: 1, name: "Current Location"}];
 
             setSuggestions(results);
-            setShowSuggestions(true);
+            setShowSearchResults(true);
         };
 
-        const handleInputChange = (e) => {
+        const handleInputChange = (e: React.FormEvent) => {
+          e.preventDefault();
           const value = e.target.value;
-          setLocation(value);
+          setSearchQuery(value);
           fetchLocationSuggestion(value);
+
+          if (value.trim() !== "") {
+            setShowSearchResults(true);
+          } else {
+            setShowSearchResults(false);
+          }
         };
 
         const handleSuggestionClick = (suggestion) => {
-          setLocation(suggestion.name);
-          setShowSuggestions(false);
+          setSearchQuery(suggestion.name);
+          setShowSearchResults(false);
         };
 
         const handleSearchBarFocus = () => {
@@ -50,15 +58,15 @@ export default function SearchBar() {
         <InputGroup flex="3">
           <Input
             placeholder="Enter a location to search for shops nearby"
-            size="lg"
+            size="md"
             variant="fill"
             htmlSize={"40"}
-            value={location}
+            value={searchQuery}
             onChange={handleInputChange}
             onFocus={handleSearchBarFocus}
           />
         </InputGroup>
-        {showSuggestions && (
+        {setSuggestions && (
           <Box margin={-2} bg="rgba(255,255,255,.7)" w={"100%"} borderRadius="md">
             {suggestions.map((suggestion) => (
               <Stack

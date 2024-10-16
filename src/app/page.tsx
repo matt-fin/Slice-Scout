@@ -1,19 +1,21 @@
-'use client'
+"use client"
 import {
   Box,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react"
 import Image from "next/image";
 import styles from "./page.module.css";
 import Hero from "./components/Hero";
 import Features from "./components/Features"
+import ContactUsButton from "./components/ContactUsButton"
 
 export default function Home() {
   return (
 
-    <Box bg='#fffcf5'>
+    <Box bg="#fffcf5">
       <main>
           <Hero/>
           <Features/>
+          <ContactUsButton/>
       </main>
     </Box>
 

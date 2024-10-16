@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import {
   Box,
@@ -9,8 +9,8 @@ import {
   Stack,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react'
-import { ReactElement } from 'react'
+} from "@chakra-ui/react"
+import { ReactElement } from "react"
 
 interface CardProps {
   heading: string
@@ -25,15 +25,15 @@ const Card = ({ heading, description, href, width, height }: CardProps) => {
     <Box
       maxW={width}
       minH={height}
-      w={'full'}
+      w={"full"}
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
       p={5}>
-      <Stack align={'start'} spacing={2}>
+      <Stack align={"start"} spacing={2}>
         <Box mt={2}>
           <Heading size="md">{heading}</Heading>
-          <Text mt={1} fontSize={'sm'}>
+          <Text mt={1} fontSize={"sm"}>
             {description}
           </Text>
         </Box>
@@ -42,33 +42,33 @@ const Card = ({ heading, description, href, width, height }: CardProps) => {
   )
 }
 
-export default function gridListWith() {
+export default function Features() {
   return (
     <Box p={4}>
-      <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
-        <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
+      <Stack spacing={4} as={Container} maxW={"3xl"} textAlign={"center"}>
+        <Heading fontSize={{ base: "2xl", sm: "4xl" }} fontWeight={"bold"}>
           Features
         </Heading>
-        <Text color={'gray.600'} fontSize={{ base: 'sm', sm: 'lg' }}>
+        <Text color={"gray.600"} fontSize={{ base: "sm", sm: "lg" }}>
           See how our app works in action.
         </Text>
       </Stack>
 
-      <Container maxW={'10000px'} maxH={'1000px'} mt={12}>
+      <Container maxW={"10000px"} maxH={"1000px"} mt={12}>
         <Flex flexWrap="wrap" gridGap={6} justify="center">
           <Card
-            heading={'Heading'}
-            description={'Map will go here.'}
-            href={'#'}
-            width={'600'}
-            height={'700'}
+            heading={"Heading"}
+            description={"Map will go here."}
+            href={"#"}
+            width={"600"}
+            height={"700"}
           />
           <Card
-            heading={'Heading'}
-            description={'Pizza card demo will go here.'}
-            href={'#'}
-            width={'400'}
-            height={'700'}
+            heading={"Heading"}
+            description={"Pizza card demo will go here."}
+            href={"#"}
+            width={"400"}
+            height={"700"}
           />
         </Flex>
       </Container>
