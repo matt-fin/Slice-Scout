@@ -35,17 +35,18 @@ export default function Navbar() {
         borderColor={useColorModeValue("gray.100", "gray.900")}
         align={"center"}
         zIndex={1000}>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+        <Flex justify={{ base: "center" }}>
           <Image
            width={"150px"}
            height={"60px"}
            src="/navbar-slicescouticon.png"
            alt="Slice Scout Logo"
+           position={"relative"}
           />
         </Flex>
 
         <Stack
-          flex={{ base: 1, md: 0 }}
+          flex={{ base: 1 }}
           justify={"flex-end"}
           direction={"row"}
           spacing={6}>

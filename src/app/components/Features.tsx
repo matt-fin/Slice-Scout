@@ -54,7 +54,7 @@ export default function Features() {
         </Text>
       </Stack>
 
-      <Container maxW={"10000px"} maxH={"1000px"} mt={12}>
+      <Container maxW={"10000px"} maxH={{base:"100%", md: "1000px"}} mt={12}>
         <Flex flexWrap="wrap" gridGap={6} justify="center">
           <Card
             heading={"Heading"}
