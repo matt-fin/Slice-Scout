@@ -4,21 +4,31 @@ import{
     IconButton,
     useDisclosure,
     Image,
+    Box,
 } from "@chakra-ui/react"
 import { CloseIcon } from '@chakra-ui/icons';
-import React from "react";
+import React, { useEffect } from "react";
 import ContactUsModal from "./ContactUsModal";
 
 export default function ContactUsButton() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleOpenClose = () => {
+        if (isOpen) {
+            onClose();
+        } else {
+            onOpen();
+        }
+    };
 
     return (
         <>
         <IconButton
         
         icon= 
-        {   isOpen ? <CloseIcon boxSize={6} /> :
-
+        {   isOpen ? (
+                <CloseIcon boxSize={6}/>
+            ) :
             <Image
                 src="contacticon.png"
                 alt="pizza_help_icon"
@@ -35,7 +45,8 @@ export default function ContactUsButton() {
         h="60px"
         w="60px"
         borderRadius={"50"}
-        onClick={onOpen}
+        onClick={handleOpenClose}
+        zIndex={2000}
         />
 
         <ContactUsModal isOpen={isOpen} onClose={onClose} />

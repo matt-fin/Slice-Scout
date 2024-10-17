@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 
-export default function ContactUsModal({ isOpen, onClose}) {
+export default function ContactUsModal({isOpen, onClose}) {
 
   //const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -29,7 +29,8 @@ export default function ContactUsModal({ isOpen, onClose}) {
       isOpen={isOpen} 
       onClose={onClose} 
       size="sm" 
-      isCentered={false}>
+      isCentered={false}
+      closeOnOverlayClick={false}>
       <ModalOverlay bg="transparent"/>
       <ModalContent 
         position="fixed"
@@ -46,6 +47,7 @@ export default function ContactUsModal({ isOpen, onClose}) {
           position="fixed"
           width="100%"
         >Contact Us</ModalHeader>
+        <ModalCloseButton />
         <ModalBody
           paddingTop="90px"
         >
