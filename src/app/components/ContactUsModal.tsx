@@ -47,12 +47,16 @@ export default function ContactUsModal({isOpen, onClose}) {
       size="sm" 
       isCentered={false}
       closeOnOverlayClick={false}>
-      <ModalOverlay bg="transparent"/>
+      <ModalOverlay bg="transparent"
+      />
       <ModalContent 
         position="fixed"
-        maxWidth={{ base: "60vw", md: "35vw", lg: "40vw" }} 
-        minWidth={{ base: "40vw", md: "25vw", lg: "30vw" }}
-        width="100%"
+        maxWidth={{ base: "60vw" }} 
+        minWidth={{ base: "40vw" }}
+        width="auto"
+        height="auto"
+        maxHeight={{ base: "70vh" }}
+        overflowY="auto"
         bottom="35px"
         right="30px"
         borderRadius="20">
@@ -60,19 +64,21 @@ export default function ContactUsModal({isOpen, onClose}) {
           bg="orange.300"
           borderTopLeftRadius="20"
           borderTopRightRadius="20"
-          position="fixed"
+          position="sticky"
+          top="0"
           width="100%"
+          zIndex={1200}
         >Contact Us</ModalHeader>
         <ModalCloseButton />
         <ModalBody
-          paddingTop="90px"
-          paddingBottom="60px"
+          paddingTop="30px"
+          paddingBottom="40px"
         >
           {isSubmitted ? (
             <Box textAlign="center">
               <Text fontSize="30px">Thank You, {name}!</Text>
               <br/>
-              <p>Your message has been received. We will get back to you within 2 business days.</p>
+              <Text>Your message has been received. We will get back to you within 2 business days.</Text>
             </Box>
           ) : (
           <form onSubmit={handleFormSubmit}>
@@ -94,7 +100,7 @@ export default function ContactUsModal({isOpen, onClose}) {
                 onChange={(e) => setMessage(e.target.value)} />
             </FormControl>
             <ModalFooter>
-              <Button colorScheme="orange" type="submit" marginTop="30px">
+              <Button colorScheme="orange" type="submit" marginTop="20px">
               Submit
               </Button>
             </ModalFooter>

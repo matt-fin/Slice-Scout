@@ -7,7 +7,6 @@ import{
     Box,
 } from "@chakra-ui/react"
 import { CloseIcon } from '@chakra-ui/icons';
-import React, { useEffect } from "react";
 import ContactUsModal from "./ContactUsModal";
 
 export default function ContactUsButton() {

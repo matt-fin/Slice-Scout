@@ -9,7 +9,6 @@ import {
   Button,
   Stack,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react"
 import {
   HamburgerIcon,
@@ -17,7 +16,6 @@ import {
 } from "@chakra-ui/icons"
 
 export default function Navbar() {
-  const { isOpen, onToggle } = useDisclosure()
 
   return (
     <Box>
@@ -34,7 +32,7 @@ export default function Navbar() {
         borderStyle={"solid"}
         borderColor={useColorModeValue("gray.100", "gray.900")}
         align={"center"}
-        zIndex={1000}>
+        zIndex={3000}>
         <Flex justify={{ base: "center" }}>
           <Image
            width={"150px"}
