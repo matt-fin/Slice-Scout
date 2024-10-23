@@ -7,10 +7,11 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 import "leaflet-defaulticon-compatibility";
 
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
 import PizzaIcon from '@/icons/pizza.png'
 import * as T from '@/libs/types'
+import { useEffect } from "react";
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
@@ -104,7 +105,7 @@ export default function Map({pizzerias, location, handlePizzeriaSelection}: MapP
 
     return (
         <MapContainer
-            center={[location.latitude, location.longitude]}
+            center={[40.758896, -73.985130]}
             zoom={13}
             scrollWheelZoom={true}
             style={{ height: "400px", width: "600px" }}
@@ -114,6 +115,20 @@ export default function Map({pizzerias, location, handlePizzeriaSelection}: MapP
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {pizzeriaMarkers}
+            <RecenterMap location={location}/>
         </MapContainer>
     );
 }
+
+function RecenterMap({location}: {location: T.Location | null}) {
+    const map = useMap();
+    
+    useEffect(() => {
+        if (location !== null)
+        {
+            map.panTo([location.latitude, location.longitude]);
+        }
+    }, [location]);
+
+    return null;
+};
