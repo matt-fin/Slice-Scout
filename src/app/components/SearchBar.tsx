@@ -3,6 +3,7 @@ import { Search2Icon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { p } from "framer-motion/client";
 import {MdMyLocation} from "react-icons/md"
+import { useDebouncedCallback } from "use-debounce";
 
 export default function SearchBar() {
 
