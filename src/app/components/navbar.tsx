@@ -14,6 +14,7 @@ import {
   HamburgerIcon,
   CloseIcon,
 } from "@chakra-ui/icons"
+import Link from 'next/link';
 
 export default function Navbar() {
 
@@ -34,13 +35,15 @@ export default function Navbar() {
         align={"center"}
         zIndex={3000}>
         <Flex justify={{ base: "center" }}>
-          <Image
-           width={"150px"}
-           height={"60px"}
-           src="/navbar-slicescouticon.png"
-           alt="Slice Scout Logo"
-           position={"relative"}
-          />
+          <Link href="/">
+            <Image
+            width={"150px"}
+            height={"60px"}
+            src="/navbar-slicescouticon.png"
+            alt="Slice Scout Logo"
+            position={"relative"}
+            />
+          </Link>
         </Flex>
 
         <Stack

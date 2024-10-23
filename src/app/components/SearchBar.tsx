@@ -1,14 +1,19 @@
+//import { useRouter } from 'next/navigation';
 import { Box, Icon, Input, InputGroup, Button, Stack, Text } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { p } from "framer-motion/client";
-import {MdMyLocation} from "react-icons/md"
+import {MdMyLocation} from "react-icons/md";
+import Link from 'next/link';
 
 export default function SearchBar() {
 
+        //const router = useRouter();
+        
         const [location, setLocation] = useState("");
         const [suggestions, setSuggestions] = useState([]);
         const [showSuggestions, setShowSuggestions] = useState(false);
+        const [showSearchResults, setShowSearchResults] = useState(false);
 
         {/*insert api here*/}
         const placeholderResults = [
@@ -43,6 +48,15 @@ export default function SearchBar() {
           fetchLocationSuggestion("");
         };
 
+        /*const handleSearch = () => {
+          if (location.trim() !== "") {
+            setShowSearchResults(true);
+            setShowSuggestions(false);
+
+            router.push(`/results?location=${encodeURIComponent(location)}`);
+          }
+        };*/
+
         //handles suggestion fetching
         const getSuggestions = async () => {
           //minimum length of inputted string
@@ -73,7 +87,7 @@ export default function SearchBar() {
   return (
     <Stack direction="row" spacing={2}>
       {/*Search Bar*/}
-      <Stack direction="column" align="center" w="100%">
+      <Stack direction="column" align="center" w="100%" padding="20px 0px">
         <InputGroup flex="3">
           <Input
             placeholder="Enter a location to search for shops nearby"
@@ -85,8 +99,16 @@ export default function SearchBar() {
             onFocus={handleSearchBarFocus}
           />
         </InputGroup>
-        {showSuggestions && (
-          <Box margin={-2} bg="rgba(255,255,255,.7)" w={"100%"} borderRadius="md">
+        
+        {showSuggestions && !showSearchResults && (
+          <Box 
+            position="absolute"
+            margin={"48px"}
+            bg="rgba(255,255,255,.8)"
+            w={"29vw"}
+            borderRadius="md"
+            zIndex={"1300"}
+          >
             {suggestions.map((suggestion) => (
               <Stack
                 key={suggestion.id}
@@ -105,11 +127,28 @@ export default function SearchBar() {
           </Box>
         )
       }
-      </Stack>
 
-      <Button colorScheme="red" size="lg">
-        <Search2Icon/>
-      </Button>
+      {showSearchResults && (
+        <Box>
+          <Text>
+            Search results for "{location}".
+          </Text>
+          <Text>
+            will be routed
+          </Text>
+        </Box>  
+      )}
+      </Stack>
+      <Link href={{
+        pathname: '/results',
+        query: {location},
+      }}>
+         <Box padding="20px 0px">
+            <Button colorScheme="red" size="lg" >
+              <Search2Icon />
+            </Button>
+          </Box>
+      </Link>
     </Stack>
   );
 };
