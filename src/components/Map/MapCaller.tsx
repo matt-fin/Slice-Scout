@@ -14,7 +14,7 @@ const LazyMap = dynamic(() => import("@/components/Map/Map"), {
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
-    location: T.Location;
+    location: T.Location | null;
     handlePizzeriaSelection: (id: number) => void;
 }
 
