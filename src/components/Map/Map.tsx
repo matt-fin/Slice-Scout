@@ -15,7 +15,7 @@ import { useEffect } from "react";
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
-    location: T.Location;
+    location: T.Location | null;
     handlePizzeriaSelection: (id: number) => void;
 }
 
@@ -126,7 +126,7 @@ function RecenterMap({location}: {location: T.Location | null}) {
     useEffect(() => {
         if (location !== null)
         {
-            map.panTo([location.latitude, location.longitude]);
+            map.flyTo([location.latitude, location.longitude]);
         }
     }, [location]);
 

@@ -31,17 +31,20 @@ const pizzerias: T.Pizzeria[] = [
 
 export default function Home() {
   const [selectedPizzeria, setSelectedPizzeria] = useState(-1);
+  const [location, setLocation] = useState<T.Location | null>(null);
   
   //can manipulate other components based on marker selection (via click)
   //ideally would manipulate shown cards
   const handlePizzeriaSelection = (id: number) => setSelectedPizzeria(id);
 
-  const location = {latitude: 40, longitude: -73};
-
   return (
     <>
       <MapCaller pizzerias={pizzerias} location={location} handlePizzeriaSelection={handlePizzeriaSelection}/>
       <p>{selectedPizzeria === 1 ? "Nothing selected" : "Selected ID: " + selectedPizzeria}</p>
+      <button onClick={() => {
+        const new_loc: T.Location = {latitude: 40, longitude: -73};
+        setLocation(new_loc);
+      }}>Change Location</button>
     </>
   );
 }
