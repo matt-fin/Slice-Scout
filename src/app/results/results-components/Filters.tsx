@@ -66,7 +66,7 @@ return (
     <Text>Price</Text>
     
     <Slider
-        min={1}
+        min={0.99}
         max={5}
         value={price}
         onChange={handlePriceChange}
