@@ -55,7 +55,6 @@ return (
         {[1, 2, 3, 4, 5].map((star) => (
             <IconButton
                 key={star}
-                aria-label={`${star} star`}
                 icon={<StarIcon color={star <= rating ? 'yellow.400' : 'blue.300'} />}
                 onClick={() => setRating(star)}
                 variant="outline"
