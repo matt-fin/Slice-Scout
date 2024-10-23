@@ -43,29 +43,29 @@ export default function SearchBar() {
           fetchLocationSuggestion("");
         };
 
-        //handles suggestion fetching
-        const getSuggestions = async () => {
+        const getSuggestions = useDebouncedCallback(async () => {
           //minimum length of inputted string
           const MIN_LENGTH = 3;
           //time waited in ms until API call is made
-          const DEBOUNCE_DELAY = 500;
-
           const BASE_URL = "https://api.geoapify.com/v1/geocode/autocomplete";
           const API_KEY = "d302a1236f034f08b008afd7f2a7449c";
 
           if (location.length >= MIN_LENGTH) {
-            const newSuggestions = setTimeout(async () => {
+            const response = await fetch(BASE_URL + 
+                                        "?text=" + 
+                                        location + 
+                                        "&lang=en" + 
+                                        "&filter=place:51d9d1938d628052c0595938a4ac3a5b4440f00101f90121af020000000000c00208" +
+                                        "&apiKey=" + 
+                                        API_KEY);
 
-              const response = await fetch(BASE_URL + "?text=" + location + "&apiKey=" + API_KEY);
-              const data = await response.json();
+            const data = await response.json();
 
-              const retrievedSuggestions = data.features.map((feature, index) => ({id: index, name: feature.properties.city + ", " + feature.properties.address_line1}));
-
-              setSuggestions(retrievedSuggestions);
-            }, DEBOUNCE_DELAY);
-            return () => clearTimeout(newSuggestions);
+            const retrievedSuggestions = data.features.map((feature, index) => ({id: index, name: feature.properties.address_line1 + ", " + (feature.properties.quarter || feature.properties.suburb || feature.properties.city)}));
+            setSuggestions(retrievedSuggestions);
           }
-        };
+
+        }, 500);
 
         //handles suggestion fetching
         useEffect(() => {getSuggestions()}, [location]);
