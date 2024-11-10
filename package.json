@@ -16,6 +16,8 @@
     "@emotion/styled": "^11.13.0",
     "@fontsource/open-sans": "^5.1.0",
     "@fontsource/raleway": "^5.1.0",
+    "@supabase/ssr": "^0.5.1",
+    "@supabase/supabase-js": "^2.46.1",
     "framer-motion": "^11.8.0",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",

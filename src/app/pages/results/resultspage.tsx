@@ -10,7 +10,7 @@ import {
     Container
   } from "@chakra-ui/react";
 import MapCaller from "../../../mapcomponents/MapCaller"
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../../../components/SearchBar';
 import Filters from './results-components/Filters'
 import PizzaCardArea from './results-components/PizzaCardArea'
 

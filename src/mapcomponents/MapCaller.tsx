@@ -5,7 +5,7 @@
 import dynamic from 'next/dynamic';
 import * as T from '../libs/types'
 
-const LazyMap = dynamic(() => import("../mapcomponents/Map"), {
+const LazyMap = dynamic(() => import("./Map"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
