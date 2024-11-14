@@ -29,7 +29,7 @@ export default function ContactUsButton() {
                 <CloseIcon boxSize={6}/>
             ) :
             <Image
-                src="contacticon.png"
+                src="/contacticon.png"
                 alt="pizza_help_icon"
                 h="50px"
                 position="fixed"

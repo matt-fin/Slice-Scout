@@ -140,7 +140,7 @@ export default function SearchBar() {
       )}
       </Stack>
       <Link href={{
-        pathname: '/results',
+        pathname: '/pages/results',
         query: {location},
       }}>
          <Box padding="20px 0px">

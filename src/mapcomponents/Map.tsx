@@ -9,19 +9,20 @@ import "leaflet-defaulticon-compatibility";
 
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
-import PizzaIcon from '../public/pizza_mapicon.png'
+//import PizzaIcon from '../public/pizza_mapicon.png'
 import * as T from '../libs/types'
 
 interface MapProps {
     pizzerias: T.Pizzeria[];
     handlePizzeriaSelection: (id: number) => void;
+    iconUrl?: string;
 }
 
-export default function Map({pizzerias, handlePizzeriaSelection}: MapProps) {
+export default function Map({pizzerias, handlePizzeriaSelection, iconUrl= '/pizza_mapicon.png'}: MapProps) {
     
     //Can extend Icon to customize further
     const pizzaIcon = new Icon({
-        iconUrl: PizzaIcon.src,
+        iconUrl
     });
     
     const pizzeriaMarkers = pizzerias.map(pizzeria => {

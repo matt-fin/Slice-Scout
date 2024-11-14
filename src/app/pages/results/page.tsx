@@ -13,6 +13,7 @@ import MapCaller from "../../../mapcomponents/MapCaller"
 import SearchBar from '../../../components/SearchBar';
 import Filters from './results-components/Filters'
 import PizzaCardArea from './results-components/PizzaCardArea'
+import ContactUsButton from '@/components/ContactUsButton';
 
 export default function results() {
   //const router = useRouter();
@@ -57,6 +58,7 @@ export default function results() {
                 <MapCaller pizzerias={test} handlePizzeriaSelection={handlePizzeriaSelection}/>
             </Box>
         </HStack>
+        <ContactUsButton/>
         </main>
     </Box>
   );
