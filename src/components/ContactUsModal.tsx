@@ -17,6 +17,7 @@ import {
   Text
 } from "@chakra-ui/react"
 import { useState } from "react"
+import { useForm } from 'react-hook-form';
 
 export default function ContactUsModal({isOpen, onClose}) {
 
@@ -27,7 +28,26 @@ export default function ContactUsModal({isOpen, onClose}) {
   
   const handleFormSubmit = async (e) => {
       e.preventDefault();
-      setIsSubmitted(true);
+      try {
+        const response = await fetch('/pages/api/ticketemail', {
+          method: "POST",
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          body: JSON.stringify({ name, email, message }),
+        });
+  
+        if (response.ok) {
+          setIsSubmitted(true);
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to send message:', errorData.message);
+          alert('Failed to send message. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error occurred while sending message:', error);
+        alert('An unexpected error occurred. Please try again.');
+      }
   };
 
   const handleFormClosure = () => {
@@ -110,3 +130,5 @@ export default function ContactUsModal({isOpen, onClose}) {
     </Modal>
   );
 }
+
+
