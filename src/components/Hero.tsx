@@ -39,7 +39,6 @@ export default function Hero() {
 
           >
           <Heading
-            fontWeight={600}
             fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
             position="relative">
             Find the authentic <br />

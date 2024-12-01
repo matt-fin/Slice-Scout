@@ -5,14 +5,20 @@ import { Providers } from "./providers";
 import "./globals.css";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
-import '@fontsource-variable/caveat';
-import '@fontsource-variable/mansalva';
-//import theme from "../theme"
+import { Caveat } from "next/font/google";
+import { Mansalva } from "next/font/google";
 
 const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"]
-})
+});
+
+const mansalva = Mansalva({
+  variable: "--font-mansalva",
+  weight: "400",
+  subsets: ["latin"]
+});
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -37,8 +43,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html className={`${caveat.variable} ${mansalva.variable}`} lang="en">
+      <body>
         <Providers>
           <Navbar/>
           {children}
