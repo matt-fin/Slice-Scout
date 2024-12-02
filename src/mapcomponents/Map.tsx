@@ -48,8 +48,8 @@ export default function Map({pizzerias, handlePizzeriaSelection, iconUrl= '/pizz
 
     return (
     <MapContainer
-        center={[40, -73]}
-        zoom={13}
+        center={[40.758896, -73.985130]} // Times Square coordinates
+        zoom={12}
         scrollWheelZoom={true}
         style={{ height: "600px", width: "400px" }}
     >

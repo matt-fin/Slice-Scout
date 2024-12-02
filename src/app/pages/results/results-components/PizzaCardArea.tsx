@@ -32,8 +32,8 @@ export default function PizzaCardArea(){
             width="100%"
             minWidth="400px"
             height={{base:"600px"}}
-            border="2px"
-            borderColor={"orange"}
+            //border="2px"
+            //borderColor={"orange"}
             overflowY={"auto"}
             display="flex"              
             justifyContent="center"    
