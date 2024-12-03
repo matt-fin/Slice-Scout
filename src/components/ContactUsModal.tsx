@@ -29,7 +29,7 @@ export default function ContactUsModal({isOpen, onClose}) {
   const handleFormSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await fetch('/pages/api/ticketemail', {
+        const response = await fetch('/api/ticketemail', {
           method: "POST",
           headers: {
             "Content-Type": 'application/json',

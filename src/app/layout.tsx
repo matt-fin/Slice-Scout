@@ -7,6 +7,8 @@ import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import { Caveat } from "next/font/google";
 import { Mansalva } from "next/font/google";
+import { Handlee } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -18,6 +20,12 @@ const mansalva = Mansalva({
   weight: "400",
   subsets: ["latin"]
 });
+
+const handlee = Handlee({
+  variable: "--font-handlee",
+  weight: "400",
+  subsets: ["latin"]
+})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,13 +51,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${caveat.variable} ${mansalva.variable}`} lang="en">
+    <html className={`${caveat.variable} ${handlee.variable}`} lang="en">
       <body>
-        <Providers>
-          <Navbar/>
-          {children}
-          <Footer/>
-        </Providers>
+        <SessionProvider>
+          <Providers>
+            <Navbar/>
+            {children}
+            <Footer/>
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );

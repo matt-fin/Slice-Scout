@@ -48,7 +48,7 @@ export default function Hero() {
             &nbsp; 
             near You.
           </Heading>
-          <Text color={"gray.800"} fontSize={{base: "sm", md: "md", lg: "lg"}}>
+          <Text color={"gray.800"} fontSize={{base: "md", md: "lg", lg: "xl"}}>
             Saving New Yorker's wallets, $1 at a time. 
           </Text>
           <Stack

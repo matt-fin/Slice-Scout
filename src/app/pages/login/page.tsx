@@ -52,6 +52,7 @@ export default function AuthPage() {
   };
 
   return (
+    <Box backgroundImage={"/pizzatransparent.png"}>
     <Flex
       align="center"
       justify="center"
@@ -118,5 +119,6 @@ export default function AuthPage() {
       </Box>
       <ContactUsButton/>
     </Flex>
+    </Box>
   );
 }

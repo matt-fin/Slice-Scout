@@ -84,10 +84,10 @@ export default function Footer() {
           <Box as="a" href={"#"}>
             FAQ
           </Box>
-          <Box as="a" href={"#"}>
-            Contact
-          </Box>
         </Stack>
+        <Box as="a" href={"./pages/submit-form"}>
+            Sourced out a new Location or need to edit a wrong location?
+        </Box>
       </Container>
 
       <Box
