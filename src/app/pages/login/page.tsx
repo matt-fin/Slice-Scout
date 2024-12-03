@@ -10,12 +10,16 @@ import {
   Stack,
   Text,
   Divider,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";  // Import next router for page navigation
 import ContactUsButton from "@/components/ContactUsButton";
 import Cookies from 'js-cookie';
-
+import { AuthApiError, createClient, isAuthApiError } from "@supabase/supabase-js";
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -23,30 +27,41 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
+  //sets message for alert in response to failed signin
+  const [alert, setAlert] = useState({isAlert: false, message: ""});
+
+  const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
   const router = useRouter();  // Create a router instance to handle redirection
 
-  // Simulate a basic authentication check (you can replace it with actual API calls)
-  const handleAuth = () => {
-    // This is just a mock check. You can replace this with an API call.
-    const mockUserData = {
-      email: "user@example.com",
-      password: "password123",  // Hardcoded for demo purposes
-    };
+  const handleAuth = async () => {
+    try {
+      if (isSignUp) {
+        // Handle sign-up logic
+        await signupUser(email, password, username, supabase);
+      } else {
+        await loginUser(email, password, supabase);
+      }
+      
+      router.push("/pages/profile");
+    } catch(error) {
+      if (isAuthApiError(error))
+      {
+        if (error.message === "Invalid login credentials")
+        {
+          setAlert({isAlert: true, message: "Invalid login credentials inputted. Please try again."});
+        }
+        else if (error.message === "missing email or phone")
+        {
+          setAlert({isAlert: true, message: "Please input an email."});
+        }
 
-    if (isSignUp) {
-      // Handle sign-up logic
-      console.log("Signing up with:", { username, email, password });
-      // In a real application, send these details to your backend for registration
-    } else {
-      // Handle sign-in logic
-      if (email === mockUserData.email && password === mockUserData.password) {
-        // Redirect to the user profile page after successful login
-        console.log("Credentials are correct. Redirecting to profile...");
-        Cookies.set('auth_token', 'your_unique_token_here', { expires: 7 });
-        router.push("/pages/profile");
-    } else {
-        // Display an error message for incorrect credentials
-        alert("Invalid email or password.");
+      }
+      else 
+      {
+        setAlert({isAlert: true, message: "Signin failed. Error was encountered."});
       }
     }
   };
@@ -70,6 +85,17 @@ export default function AuthPage() {
         <Heading as="h2" size="lg" textAlign="center" mb={6}>
           {isSignUp ? "Create an Account" : "Sign In"}
         </Heading>
+
+        {alert.isAlert && (
+          <Alert 
+            status="error"
+            mb={4}
+          >
+            <AlertIcon />
+            <AlertTitle>Invalid Fields</AlertTitle>
+            <AlertDescription>{alert.message}</AlertDescription>
+          </Alert>
+        )}
 
         {isSignUp && (
           <Input
@@ -120,3 +146,38 @@ export default function AuthPage() {
     </Flex>
   );
 }
+
+async function loginUser(email, password, client) {
+  const { data: {user}, error } = await client.auth.signInWithPassword({
+    email: email,
+    password: password,
+  })
+
+  if (user) {
+    console.log("Signed in with: ", {email, password});
+  }
+  else if (error) {
+    console.error("Signing in failed: ", error);
+    throw error;
+  }
+} 
+
+async function signupUser(email, password, username, client) {
+  const { data: {user}, error } = await client.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        username: username,
+      },
+    },
+  });
+
+  if (user) {
+    console.log("Signed up with: ", {email, password, username});
+  }
+  else if (error) {
+    console.error("Signup failed: ", error);
+    throw error;
+  }
+} 
