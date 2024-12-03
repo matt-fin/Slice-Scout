@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Button,
     FormControl,
@@ -12,7 +12,7 @@ import {
     Box,
     Heading
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
+//import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { createClient } from '@supabase/supabase-js';
 import ContactUsButton from "@/components/ContactUsButton";
@@ -22,9 +22,10 @@ const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
+
 const SubmitForm = () => {
-    const { data: session } = useSession();
-    const router = useRouter();
+    //const { data: session } = useSession();
+    //const router = useRouter();
 
     const [pizzeriaId, setPizzeriaId] = useState<number | "">("");
     const [requestType, setRequestType] = useState<string>("");
@@ -32,54 +33,45 @@ const SubmitForm = () => {
     const [addressLine1, setAddressLine1] = useState<string>("");
     const [addressLine2, setAddressLine2] = useState<string>("");
     const [city, setCity] = useState<string>("");
-    const state = "New York"
-    const country = "United States"
+    const state = "New York";
+    const country = "United States";
+    const geocode_latitude = "12.345678901";
+    const geocode_longitude = "12.243253645";
+    const [user, setUser] = useState<any>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+      const checkUserSession = async () => {
+          const { data: { session }, error } = await supabase.auth.getSession();
+          if (error || !session) {
+              router.push("/pages/login");
+          } else {
+              setUser(session.user); // Set user data when session exists
+          }
+      };
+      checkUserSession();
+  }, [router]);
 
     //Need to geocode latitude and longitude before storing
 
-    if(!session) {
+    /*if(!session) {
       router.push("./login")
       return null;
-    }
+    }*/
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const form = {
-            user_id: session.user.id,
-            pizzeria_id: pizzeriaId,
-            request_type: requestType,
-            location_name: locationName,
-            address_line1: addressLine1,
-            address_line2: addressLine2,
-            city: city,
-            state: state,
-            country: country,
-            geocode_latitude: "12.345678901",
-            geocode_longitude: "12.243253645",
-        };
+        if (!user) return;
 
-        const { data: submissionsData, error: submissionError } = await supabase
-        .from("Submissions")
-        .insert([
-            {
-                user_id: session.user.id,
-                pizzeria_id: pizzeriaId,
-                request_type: requestType,
-                submission_status: "Pending"
-            },
-        ]).select("submission_id")
-        .single();
-
-        if (submissionError) throw new Error(submissionError.message);
-
+        const userId = user.id;
         try {
             const res = await fetch("/api/submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(form)
+                body: JSON.stringify({userId, pizzeriaId, requestType, locationName, addressLine1, addressLine2, city, state, country, geocode_latitude, geocode_longitude})
             });
             if (res.ok) {
                 console.log("Form submission success!");
@@ -92,7 +84,7 @@ const SubmitForm = () => {
             }
         }
         catch (error) {
-            console.error(error);
+            console.error("Form submission failure");
         }
     }
 
@@ -112,7 +104,7 @@ return (
             <FormLabel fontWeight={"600"}>Request Type</FormLabel>
             <Select variant="fill" opacity={"70%"} value={requestType} onChange={(e) => setRequestType(e.target.value)}>
               <option value="">Select Request</option>
-              <option value="update_location">Update Location</option>
+              <option value="update_location">Add Location</option>
             </Select>
           </FormControl>
           <FormControl isRequired>

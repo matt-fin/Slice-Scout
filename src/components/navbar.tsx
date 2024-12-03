@@ -15,17 +15,18 @@ import {
   CloseIcon,
 } from "@chakra-ui/icons"
 import Link from 'next/link';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { UUID } from "crypto";
+
+const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
 
 export default function Navbar() {
-  const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
-
+  
   const router = useRouter();  // Create a router instance to handle redirection
-
   //defaults to signed out
   const [signedIn, setSignedIn] = useState(false);
 
@@ -44,6 +45,7 @@ export default function Navbar() {
       setSignedIn(false);
     }
   })
+
   
   return (
     <Box>
@@ -78,22 +80,23 @@ export default function Navbar() {
           justify={"flex-end"}
           direction={"row"}
           spacing={6}>
-          <Link href="/pages/about">
-            <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
-              About
-            </Button>
-          </Link>
           {signedIn ?
             <>
+              <Text paddingTop="10px">Hello, {}</Text>
+              <Link href="/pages/profile">
+                <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
+                  My Profile
+                </Button>
+              </Link>
               <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px" onClick={signout}>
                 Sign Out
               </Button>
             </>
             :
             <>
-              <Link href="/pages/login">
+              <Link href="/pages/about">
                 <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
-                  Sign In
+                  About
                 </Button>
               </Link>
               <Link href="/pages/login">
@@ -106,7 +109,7 @@ export default function Navbar() {
                   _hover={{
                     bg: "red.300",
                   }}>
-                  Sign Up
+                  Sign Up/In
                 </Button>
               </Link>
             </>

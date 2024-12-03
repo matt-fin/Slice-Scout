@@ -18,7 +18,6 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";  // Import next router for page navigation
 import ContactUsButton from "@/components/ContactUsButton";
-import Cookies from 'js-cookie';
 import { AuthApiError, createClient, isAuthApiError } from "@supabase/supabase-js";
 
 export default function AuthPage() {
@@ -171,6 +170,7 @@ async function signupUser(email, password, username, client) {
     options: {
       data: {
         username: username,
+        email: email,
       },
     },
   });

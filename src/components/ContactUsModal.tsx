@@ -22,7 +22,7 @@ import { useForm } from 'react-hook-form';
 export default function ContactUsModal({isOpen, onClose}) {
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [recipientEmail, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   
@@ -34,7 +34,7 @@ export default function ContactUsModal({isOpen, onClose}) {
           headers: {
             "Content-Type": 'application/json',
           },
-          body: JSON.stringify({ name, email, message }),
+          body: JSON.stringify({ name, recipientEmail, message }),
         });
   
         if (response.ok) {
@@ -110,7 +110,7 @@ export default function ContactUsModal({isOpen, onClose}) {
           
             <FormControl id="email" mb={4} isRequired>
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="Your Email" value={email}
+              <Input type="email" placeholder="Your Email" value={recipientEmail}
                 onChange={(e) => setEmail(e.target.value)} />
             </FormControl>
           

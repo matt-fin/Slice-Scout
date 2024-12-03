@@ -5,10 +5,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
-import { Caveat } from "next/font/google";
-import { Mansalva } from "next/font/google";
-import { Handlee } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
+import { Caveat, Mansalva, Handlee } from "next/font/google";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -53,13 +50,11 @@ export default function RootLayout({
   return (
     <html className={`${caveat.variable} ${handlee.variable}`} lang="en">
       <body>
-        <SessionProvider>
           <Providers>
             <Navbar/>
             {children}
             <Footer/>
           </Providers>
-        </SessionProvider>
       </body>
     </html>
   );

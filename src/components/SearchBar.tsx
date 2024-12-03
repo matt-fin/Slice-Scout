@@ -93,7 +93,7 @@ export default function SearchBar() {
             placeholder="Enter a location to search for shops nearby"
             size={{base: "sm", md: "md", lg: "lg"}}
             variant="fill"
-            htmlSize={"40"}
+            htmlSize={40}
             value={location}
             onChange={handleInputChange}
             onFocus={handleSearchBarFocus}

@@ -22,6 +22,7 @@ import { SearchIcon, SettingsIcon, StarIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import ContactUsButton from "@/components/ContactUsButton";
 import { createClient } from "@supabase/supabase-js";
+import { useDeprecatedAnimatedState } from "framer-motion";
 
 const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -48,7 +49,7 @@ export default function ProfilePage() {
   });
 
   return (
-    <Flex direction="row" minH="100vh" bg="gray.50">
+    <Flex direction="row" minH="100vh" bg="gray.50" pt={"75px"}>
       {/* Sidebar */}
       <Box
         width="250px"
