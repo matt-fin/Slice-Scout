@@ -19,8 +19,15 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { SearchIcon, SettingsIcon, StarIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactUsButton from "@/components/ContactUsButton";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
+const user = await supabase.auth.getUser();
 
 // Mock data
 const favoritedShops = [
@@ -91,7 +98,7 @@ export default function ProfilePage() {
             Username
           </Heading>
           <Text color="gray.500" mt={2}>
-            User ID: 12345
+            {user.data.user.id}
           </Text>
           <Text mt={4} fontSize="md">
             Bio: Passionate about finding the best pizza around the world and
