@@ -14,11 +14,9 @@ import SearchBar from '../../../components/SearchBar';
 import Filters from './results-components/Filters'
 import PizzaCardArea from './results-components/PizzaCardArea'
 import ContactUsButton from '@/components/ContactUsButton';
-import { createClient } from "@supabase/supabase-js";
+import { clientConnection } from '@/utils/supabase/server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, anonKey);
+const supabase = await clientConnection();
 
 
 export default function results() {
@@ -42,7 +40,7 @@ export default function results() {
           shop_url,
           reviews_url,
           phone_num,
-          location ( 
+          location: location ( 
             street_address,
             zip_code,
             latitude,

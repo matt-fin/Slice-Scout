@@ -21,12 +21,9 @@ import {
 import { SearchIcon, SettingsIcon, StarIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import ContactUsButton from "@/components/ContactUsButton";
-import { createClient } from "@supabase/supabase-js";
+import { clientConnection } from "@/utils/supabase/server";
 
-const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
+const supabase = await clientConnection();
 const user = await supabase.auth.getUser();
 
 // Mock data

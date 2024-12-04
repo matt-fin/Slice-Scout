@@ -16,7 +16,7 @@ import {
   Box,
   Text
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useForm } from 'react-hook-form';
 
 export default function ContactUsModal({isOpen, onClose}) {
@@ -25,7 +25,8 @@ export default function ContactUsModal({isOpen, onClose}) {
   const [recipientEmail, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  const nameInputRef = useRef(null);
+
   const handleFormSubmit = async (e) => {
       e.preventDefault();
       try {
@@ -51,12 +52,23 @@ export default function ContactUsModal({isOpen, onClose}) {
   };
 
   const handleFormClosure = () => {
-    setName("");
-    setEmail("");
-    setMessage("");
-    setIsSubmitted(false);
+    if (isSubmitted || (name === "" && recipientEmail === "" && message === "")) {
+      // Reset if submitted or all fields are empty
+      setName("");
+      setEmail("");
+      setMessage("");
+      setIsSubmitted(false);
+    }
     onClose();
-  }
+  };
+
+  // Focus input when the modal opens
+  useEffect(() => {
+    if (isOpen && !isSubmitted) {
+      nameInputRef.current?.focus();
+    }
+  }, [isOpen, isSubmitted]);
+
   
   return (
     
@@ -71,8 +83,8 @@ export default function ContactUsModal({isOpen, onClose}) {
       />
       <ModalContent 
         position="fixed"
-        maxWidth={{ base: "60vw" }} 
-        minWidth={{ base: "40vw" }}
+        maxWidth={{ base: "40vw" }} 
+        minWidth={{ base: "30vw" }}
         width="auto"
         height="auto"
         maxHeight={{ base: "70vh" }}
@@ -98,7 +110,7 @@ export default function ContactUsModal({isOpen, onClose}) {
             <Box textAlign="center">
               <Text fontSize="30px">Thank You, {name}!</Text>
               <br/>
-              <Text>Your message has been received. We will get back to you within 2 business days.</Text>
+              <Text>Your message has been received. We will get back to you within 2 business days. Please check your email for a confirmation. Refresh this page if you would like to send a new message.</Text>
             </Box>
           ) : (
           <form onSubmit={handleFormSubmit}>

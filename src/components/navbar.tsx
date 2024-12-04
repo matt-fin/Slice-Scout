@@ -16,13 +16,11 @@ import {
 } from "@chakra-ui/icons"
 import Link from 'next/link';
 import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { UUID } from "crypto";
+import { clientConnection } from "@/utils/supabase/server";
 
-const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseURL, anonKey); //create supabase client to handle authentication
+const supabase = await clientConnection();
 
 export default function Navbar() {
   
