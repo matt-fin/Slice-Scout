@@ -2,30 +2,37 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
-    Container,
     Box,
-    Text,
-    Grid,
-    GridItem,
     SimpleGrid
 } from "@chakra-ui/react";
 import PizzaCard from "./PizzaCard"
 
+interface Location {
+    street_address: string;
+    zip_code: string;
+    latitude: number;
+    longitude: number;
+    borough: string;
+}
 
-export default function PizzaCardArea(){
+interface Pizzeria {
+    pizzeria_id: bigint;
+    pizzeria_name: string;
+    phone_num: string;
+    open_time: string;
+    closing_time: string;
+    slice_price: number;
+    rating: number;
+    shop_url: string;
+    reviews_url: string;
+    location: Location;
+}
 
-    const testCard = () => {
-        return(
-            <PizzaCard
-                name="Johnny's Pizzeria"
-                phone="(718) 492-9735"
-                hours="11pm EST"
-                address="5806 5th Ave, Brooklyn, NY 11220"
-                price={2}
-                reviewsLink="https://www.yelp.com/biz/johnnys-pizzeria-brooklyn-2"
-                websiteLink="http://www.johnnyspizzeria.com/"/>
-        )
-    }
+interface PizzaCardAreaProps {
+    pizzerias: Pizzeria[];
+}
+
+export default function PizzaCardArea({ pizzerias }: PizzaCardAreaProps){
     return (
         <Box 
             flex="1"
@@ -45,14 +52,18 @@ export default function PizzaCardArea(){
                 alignItems="start"
                 margin="22px 15px"
                 >
-                {testCard()}
-                {testCard()}
-                {testCard()}
-                {testCard()}
-                {testCard()}
-                {testCard()}
-                {testCard()}
-                {testCard()}
+                {pizzerias.map((pizzeria) => (
+                    <PizzaCard
+                    key={pizzeria.pizzeria_id.toString()}
+                    name={pizzeria.pizzeria_name}
+                    phone={pizzeria.phone_num}
+                    hours={`${pizzeria.open_time} - ${pizzeria.closing_time}`}
+                    address={`${pizzeria.location.street_address}, ${pizzeria.location.zip_code}, ${pizzeria.location.borough}`}
+                    price={pizzeria.slice_price}
+                    reviewsLink={pizzeria.reviews_url}
+                    websiteLink={pizzeria.shop_url}
+                    />
+                ))}
             </SimpleGrid>
         </Box>
     )

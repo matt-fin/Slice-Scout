@@ -48,7 +48,6 @@ export default function SearchBar() {
           fetchLocationSuggestion("");
         };
 
-
         //handles suggestion fetching
         const getSuggestions = async () => {
           //minimum length of inputted string
@@ -82,7 +81,7 @@ export default function SearchBar() {
       <Stack direction="column" align="center" w="100%" padding="20px 0px">
         <InputGroup flex="3">
           <Input
-            placeholder="Enter a location to search for shops nearby"
+            placeholder="Enter a zip code to search for shops nearby"
             size={{base: "sm", md: "md", lg: "lg"}}
             variant="fill"
             htmlSize={40}
