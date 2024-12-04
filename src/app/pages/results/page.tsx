@@ -27,7 +27,7 @@ export default function results() {
     }
   }, [searchParams])
 
-  const test: T.Pizzeria[] = [
+  /*const test: T.Pizzeria[] = [
     {
         id: 1,
         name: "Pizzeria1",
@@ -36,7 +36,7 @@ export default function results() {
             longitude: -74.01552994651469
         }
     }
-]
+]*/
     const handlePizzeriaSelection = (id: number) => {
         console.log("Selected Pizzeria ID:", id);
     };

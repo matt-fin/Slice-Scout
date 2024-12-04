@@ -48,14 +48,6 @@ export default function SearchBar() {
           fetchLocationSuggestion("");
         };
 
-        /*const handleSearch = () => {
-          if (location.trim() !== "") {
-            setShowSearchResults(true);
-            setShowSuggestions(false);
-
-            router.push(`/results?location=${encodeURIComponent(location)}`);
-          }
-        };*/
 
         //handles suggestion fetching
         const getSuggestions = async () => {
@@ -100,7 +92,7 @@ export default function SearchBar() {
           />
         </InputGroup>
         
-        {showSuggestions && !showSearchResults && (
+        {showSuggestions && (
           <Box 
             position="absolute"
             margin={"48px"}
@@ -133,9 +125,6 @@ export default function SearchBar() {
           <Text>
             Search results for "{location}".
           </Text>
-          <Text>
-            will be routed
-          </Text>
         </Box>  
       )}
       </Stack>
@@ -144,7 +133,7 @@ export default function SearchBar() {
         query: {location},
       }}>
          <Box padding="20px 0px">
-            <Button colorScheme="red" size="lg" >
+            <Button colorScheme="red" size="lg" isDisabled={!location} >
               <Search2Icon />
             </Button>
           </Box>
