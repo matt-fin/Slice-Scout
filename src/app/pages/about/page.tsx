@@ -20,7 +20,7 @@ export default function About() {
       <Flex direction={{ base: "column", md: "row" }} align="center" justify="space-between" mb="12" gap="8">
         {/* Left Image */}
         <Image
-          src="/images/nyc-pizza.jpg"
+          src="/slicescoutlogo.png"
           alt="NYC Pizza"
           borderRadius="lg"
           objectFit="cover"
