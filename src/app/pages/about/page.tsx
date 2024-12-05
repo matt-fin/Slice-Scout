@@ -1,135 +1,174 @@
-//sample page
-"use client"
+// About Page
+"use client";
 
 import ContactUsButton from "@/components/ContactUsButton";
-import { Box, Flex, Heading, Text, Image, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Image, Stack, Divider } from "@chakra-ui/react";
 
 export default function About() {
   return (
-    <Box padding="4" maxW="1200px" mx="auto">
-      <Heading as="h1" fontSize="4xl" mb="4" textAlign="center">
-        About Us
-      </Heading>
-      <Text fontSize="lg" textAlign="center" mb="8" color="gray.600">
-        We are a passionate team dedicated to delivering high-quality products
-        and services that make a difference.
-      </Text>
+    <Box padding="100px" maxW="1200px" mx="auto" bg="white" borderRadius="lg" boxShadow="lg">
+      {/* Header Section */}
+      <Box textAlign="center" mb="12">
+        <Heading as="h1" fontSize="5xl" fontWeight="bold" mb="4" color="orange.500">
+          About Slice Scout
+        </Heading>
+        <Text fontSize="lg" color="gray.600">
+          Bringing back NYC’s iconic 99¢ pizza tradition, one slice at a time.
+        </Text>
+      </Box>
 
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        align="center"
-        justify="center"
-        gap="8"
-        mb="12"
-      >
+      <Flex direction={{ base: "column", md: "row" }} align="center" justify="space-between" mb="12" gap="8">
+        {/* Left Image */}
         <Image
-          src="/images/team-photo.jpg"
-          alt="Our Team"
-          boxSize={{ base: "300px", md: "400px" }}
-          borderRadius="md"
+          src="/slicescoutlogo.png"
+          alt="NYC Pizza"
+          borderRadius="lg"
           objectFit="cover"
+          boxSize={{ base: "100%", md: "50%" }}
+          shadow="lg"
         />
-        <Stack spacing="4" maxW="600px">
-          <Heading as="h2" fontSize="2xl">
+        {/* Right Text */}
+        <Stack spacing="6" maxW="600px">
+          <Heading as="h2" fontSize="3xl" color="orange.500">
             Our Mission
           </Heading>
-          <Text color="gray.700">
-            Our mission is to innovate and create solutions that improve the
-            everyday lives of our customers. We believe in quality, integrity,
-            and commitment to excellence in everything we do.
+          <Text fontSize="lg" color="gray.700">
+            Slice Scout was created by a group of NYC-based college students who
+            share a deep love for 99¢ pizza—a true New York City staple. Our
+            mission is simple: to help New Yorkers find affordable, authentic
+            slices amidst rising prices while preserving this cherished tradition
+            for generations to come.
           </Text>
         </Stack>
       </Flex>
 
-      <Box bg="gray.100" borderRadius="md" p="8" mb="12">
-        <Heading as="h2" fontSize="2xl" mb="4" textAlign="center">
-          Our Values
+      <Divider mb="12" />
+
+      {/* Features Section */}
+      <Box mb="12">
+        <Heading as="h2" fontSize="3xl" textAlign="center" mb="8" color="orange.500">
+          What We Offer
         </Heading>
         <Flex
           direction={{ base: "column", md: "row" }}
           justify="space-around"
+          gap="8"
           wrap="wrap"
-          gap="6"
         >
-          <Box maxW="300px" textAlign="center">
-            <Heading as="h3" fontSize="xl" mb="2">
-              Innovation
+          <Box textAlign="center" maxW="300px" p="4" bg="gray.50" borderRadius="lg" shadow="md">
+            <Heading as="h3" fontSize="xl" mb="4" color="orange.600">
+              Real-Time Map
             </Heading>
-            <Text color="gray.600">
-              We constantly push ourselves to think outside the box and deliver
-              unique solutions.
+            <Text fontSize="md" color="gray.600">
+              Explore NYC pizza shops on a live map, categorized by the actual price
+              of a regular slice.
             </Text>
           </Box>
-          <Box maxW="300px" textAlign="center">
-            <Heading as="h3" fontSize="xl" mb="2">
-              Integrity
+          <Box textAlign="center" maxW="300px" p="4" bg="gray.50" borderRadius="lg" shadow="md">
+            <Heading as="h3" fontSize="xl" mb="4" color="orange.600">
+              User Reports
             </Heading>
-            <Text color="gray.600">
-              We value honesty and transparency in all our interactions.
+            <Text fontSize="md" color="gray.600">
+              Submit and update slice prices at your favorite pizza spots to keep our
+              database accurate and up-to-date.
             </Text>
           </Box>
-          <Box maxW="300px" textAlign="center">
-            <Heading as="h3" fontSize="xl" mb="2">
-              Customer Focus
+          <Box textAlign="center" maxW="300px" p="4" bg="gray.50" borderRadius="lg" shadow="md">
+            <Heading as="h3" fontSize="xl" mb="4" color="orange.600">
+              Notifications
             </Heading>
-            <Text color="gray.600">
-              Our customers are at the center of everything we do.
+            <Text fontSize="md" color="gray.600">
+              Receive alerts when prices change at nearby pizza shops, so you’re
+              always in the know.
             </Text>
           </Box>
         </Flex>
       </Box>
 
-      <Box textAlign="center">
-        <Heading as="h2" fontSize="2xl" mb="4">
+      <Divider mb="12" />
+
+      {/* Story Section */}
+      <Box textAlign="center" mb="12">
+        <Heading as="h2" fontSize="3xl" mb="6" color="orange.500">
+          Our Story
+        </Heading>
+        <Text fontSize="lg" color="gray.700" maxW="800px" mx="auto">
+          Slice Scout was inspired by the cheap pizza purge NYC experienced after
+          COVID-19 and inflation. As students at CUNY, we’ve relied on 99¢ pizza
+          to get through tight budgets and late-night study sessions. We saw the
+          need to create a resource for finding traditional 99¢ slices amidst
+          rising prices and the confusion caused by misleading shop names.
+        </Text>
+      </Box>
+
+      {/* Team Section */}
+      <Box>
+        <Heading as="h2" fontSize="3xl" textAlign="center" mb="8" color="orange.500">
           Meet the Team
         </Heading>
-        <Text color="gray.700" mb="8">
-          We are a group of dedicated professionals who love what we do.
-        </Text>
-        <Flex wrap="wrap" justify="center" gap="6">
+        <Flex wrap="wrap" justify="center" gap="8">
           <Box textAlign="center">
             <Image
-              src="/images/team-member1.jpg"
-              alt="Team Member 1"
+              src="/Matthew.png"
+              alt="Matthew Finamore"
               boxSize="150px"
               borderRadius="full"
               mb="4"
+              shadow="md"
             />
-            <Heading as="h3" fontSize="lg">
-              Alex Johnson
+            <Heading as="h3" fontSize="lg" color="gray.800">
+              Matthew Finamore
             </Heading>
-            <Text color="gray.600">CEO & Founder</Text>
+            <Text color="gray.600">Founder & Full Stack Developer</Text>
           </Box>
           <Box textAlign="center">
             <Image
-              src="/images/team-member2.jpg"
-              alt="Team Member 2"
+              src="/Jack.png"
+              alt="Jack Hachicho"
               boxSize="150px"
               borderRadius="full"
               mb="4"
+              shadow="md"
             />
-            <Heading as="h3" fontSize="lg">
-              Maria Chen
+            <Heading as="h3" fontSize="lg" color="gray.800">
+              Jack Hachicho
             </Heading>
-            <Text color="gray.600">Head of Engineering</Text>
+            <Text color="gray.600">Full Stack Developer</Text>
           </Box>
           <Box textAlign="center">
             <Image
-              src="/images/team-member3.jpg"
-              alt="Team Member 3"
+              src="/Tor.png"
+              alt="Tor Sdayur"
               boxSize="150px"
               borderRadius="full"
               mb="4"
+              shadow="md"
             />
-            <Heading as="h3" fontSize="lg">
-              Chris Evans
+            <Heading as="h3" fontSize="lg" color="gray.800">
+              Tor Sdayur
             </Heading>
-            <Text color="gray.600">Product Manager</Text>
+            <Text color="gray.600">Lead Backend Developer</Text>
           </Box>
-          {/* Add more team members as needed */}
+          <Box textAlign="center">
+            <Image
+              src="/Rei.png"
+              alt="Rei Zheng"
+              boxSize="150px"
+              borderRadius="full"
+              mb="4"
+              shadow="md"
+            />
+            <Heading as="h3" fontSize="lg" color="gray.800">
+              Rei Zheng
+            </Heading>
+            <Text color="gray.600">Head of Design and Development</Text>
+          </Box>
         </Flex>
       </Box>
-      <ContactUsButton/>
+
+      <Box textAlign="center" mt="12">
+        <ContactUsButton />
+      </Box>
     </Box>
   );
 }

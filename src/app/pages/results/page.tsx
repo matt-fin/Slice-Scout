@@ -26,7 +26,6 @@ export default function results() {
   //query once and store data in instance
   const [pizzerias, setPizzerias] = useState([]);
   const [allPizzerias, setAllPizzerias] = useState([]);
-  const [pizza, setPizza] = useState([]);
 
     useEffect(() => {
       const fetchAllPizzerias = async () => {
@@ -52,6 +51,7 @@ export default function results() {
             alert("Failed to fetch pizzeria data. Please try again later.");
           } else {
             setAllPizzerias(mergedData);
+
         }
       };
 
@@ -72,9 +72,9 @@ export default function results() {
         }
         return a.pizzeria_name.localeCompare(b.pizzeria_name);
       });
-      setPizzerias(filteredPizzerias);
+      setPizzerias(allPizzerias);
     }
-  }, [searchLocation, allPizzerias])
+  }, [searchLocation, allPizzerias]);
 
     const handlePizzeriaSelection = (id: number) => {
         console.log("Selected Pizzeria ID:", id);
@@ -100,7 +100,7 @@ export default function results() {
             <Filters/>
             <PizzaCardArea pizzerias={pizzerias}/>
             <Box display="flex" justifyContent="flex-end">
-                <MapCaller pizzerias={pizzerias} handlePizzeriaSelection={handlePizzeriaSelection}/>
+                {/*<MapCaller pizzerias={pizzerias} handlePizzeriaSelection={handlePizzeriaSelection}/>*/}
             </Box>
         </HStack>
         <ContactUsButton/>
