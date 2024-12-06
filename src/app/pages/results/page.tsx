@@ -16,19 +16,40 @@ import PizzaCardArea from './results-components/PizzaCardArea'
 import ContactUsButton from '@/components/ContactUsButton';
 import { clientConnection } from '@/utils/supabase/server';
 
-const supabase = await clientConnection();
+interface Location {
+  street_address: string;
+  zip_code: string;
+  latitude: number;
+  longitude: number;
+  borough: string;
+}
 
+interface Pizzeria {
+  pizzeria_id: bigint;
+  pizzeria_name: string;
+  phone_num: string;
+  open_time: string;
+  closing_time: string;
+  slice_price: number;
+  rating: number;
+  shop_url: string;
+  reviews_url: string;
+  location: Location;
+}
 
-export default function results() {
+export default function Results() {
   //const router = useRouter();
   const searchParams = useSearchParams();
   const [searchLocation, setSearchLocation] = useState('');
   //query once and store data in instance
-  const [pizzerias, setPizzerias] = useState([]);
-  const [allPizzerias, setAllPizzerias] = useState([]);
+  const [pizzerias, setPizzerias] = useState<Pizzeria[]>([]);
+  const [allPizzerias, setAllPizzerias] = useState<Pizzeria[]>([]);
 
     useEffect(() => {
+      
       const fetchAllPizzerias = async () => {
+        const supabase = await clientConnection();
+
         const { data: mergedData, error: mergeError } = await supabase.from('pizzerias').select(`
           pizzeria_id, 
           pizzeria_name,
@@ -39,7 +60,7 @@ export default function results() {
           shop_url,
           reviews_url,
           phone_num,
-          location: location ( 
+          location ( 
             street_address,
             zip_code,
             latitude,
@@ -58,15 +79,19 @@ export default function results() {
       fetchAllPizzerias();
     }, []);
 
-
   useEffect(() => {
-    const location = searchParams.get('location');
-    setSearchLocation(location);
+    const locationZip = searchParams.get('locationZip');
+    setSearchLocation(locationZip || '');
 
-    if(location && allPizzerias.length > 0) {
-      const filteredPizzerias = allPizzerias
-      .filter(p => p.location?.zip_code === location)
-      .sort((a, b) => {
+    if(locationZip && allPizzerias.length > 0) {
+
+      console.log("locationZip (type):", typeof locationZip, locationZip);
+
+      const filteredPizzerias = allPizzerias.filter((p) => {
+      console.log("p.location?.zip_code (type):", typeof p.location?.zip_code, p.location?.zip_code);
+      return p.location?.zip_code === locationZip;
+    });
+      filteredPizzerias.sort((a, b) => {
         if(a.slice_price !== b.slice_price) {
           return a.slice_price - b.slice_price;
         }

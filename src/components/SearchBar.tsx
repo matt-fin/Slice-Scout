@@ -10,7 +10,7 @@ export default function SearchBar() {
 
         //const router = useRouter();
         
-        const [location, setLocation] = useState("");
+        const [locationZip, setLocationZip] = useState("");
         const [suggestions, setSuggestions] = useState([]);
         const [showSuggestions, setShowSuggestions] = useState(false);
         const [showSearchResults, setShowSearchResults] = useState(false);
@@ -35,12 +35,12 @@ export default function SearchBar() {
 
         const handleInputChange = (e) => {
           const value = e.target.value;
-          setLocation(value);
+          setLocationZip(value);
           fetchLocationSuggestion(value);
         };
 
         const handleSuggestionClick = (suggestion) => {
-          setLocation(suggestion.name);
+          setLocationZip(suggestion.name);
           setShowSuggestions(false);
         };
 
@@ -58,7 +58,7 @@ export default function SearchBar() {
           const BASE_URL = "https://api.geoapify.com/v1/geocode/autocomplete";
           const API_KEY = "d302a1236f034f08b008afd7f2a7449c";
 
-          if (location.length >= MIN_LENGTH) {
+          if (locationZip.length >= MIN_LENGTH) {
             const newSuggestions = setTimeout(async () => {
 
               const response = await fetch(BASE_URL + "?text=" + location + "&apiKey=" + API_KEY);
@@ -85,7 +85,7 @@ export default function SearchBar() {
             size={{base: "sm", md: "md", lg: "lg"}}
             variant="fill"
             htmlSize={40}
-            value={location}
+            value={locationZip}
             onChange={handleInputChange}
             onFocus={handleSearchBarFocus}
           />
@@ -122,14 +122,14 @@ export default function SearchBar() {
       {showSearchResults && (
         <Box>
           <Text>
-            Search results for "{location}".
+            Search results for "{locationZip}".
           </Text>
         </Box>  
       )}
       </Stack>
       <Link href={{
         pathname: '/pages/results',
-        query: {location},
+        query: {locationZip: locationZip.toString()},
       }}>
          <Box padding="20px 0px">
             <Button colorScheme="red" size="lg" isDisabled={!location} >

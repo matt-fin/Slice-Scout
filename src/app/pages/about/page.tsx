@@ -104,7 +104,7 @@ export default function About() {
       {/* Team Section */}
       <Box>
         <Heading as="h2" fontSize="3xl" textAlign="center" mb="8" color="orange.500">
-          Meet the Team
+          Meet the Development Team
         </Heading>
         <Flex wrap="wrap" justify="center" gap="8">
           <Box textAlign="center">
@@ -119,7 +119,6 @@ export default function About() {
             <Heading as="h3" fontSize="lg" color="gray.800">
               Matthew Finamore
             </Heading>
-            <Text color="gray.600">Founder & Full Stack Developer</Text>
           </Box>
           <Box textAlign="center">
             <Image
@@ -133,7 +132,6 @@ export default function About() {
             <Heading as="h3" fontSize="lg" color="gray.800">
               Jack Hachicho
             </Heading>
-            <Text color="gray.600">Full Stack Developer</Text>
           </Box>
           <Box textAlign="center">
             <Image
@@ -147,7 +145,6 @@ export default function About() {
             <Heading as="h3" fontSize="lg" color="gray.800">
               Tor Sdayur
             </Heading>
-            <Text color="gray.600">Lead Backend Developer</Text>
           </Box>
           <Box textAlign="center">
             <Image
@@ -161,7 +158,6 @@ export default function About() {
             <Heading as="h3" fontSize="lg" color="gray.800">
               Rei Zheng
             </Heading>
-            <Text color="gray.600">Head of Design and Development</Text>
           </Box>
         </Flex>
       </Box>
