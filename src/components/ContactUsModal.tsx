@@ -17,7 +17,6 @@ import {
   Text
 } from "@chakra-ui/react"
 import { useState, useEffect, useRef } from "react"
-import { useForm } from 'react-hook-form';
 
 export default function ContactUsModal({isOpen, onClose}) {
 

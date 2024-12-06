@@ -2,13 +2,13 @@
 import { Box, Icon, Input, InputGroup, Button, Stack, Text } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
-import { p } from "framer-motion/client";
 import {MdMyLocation} from "react-icons/md";
-import Link from 'next/link';
+import { useRouter } from 'next/navigation'
+import { handleEnterKey } from "@/utils/handleEnterKeyEvents";
 
 export default function SearchBar() {
 
-        //const router = useRouter();
+        const router = useRouter();
         
         const [locationZip, setLocationZip] = useState("");
         const [suggestions, setSuggestions] = useState([]);
@@ -46,6 +46,12 @@ export default function SearchBar() {
 
         const handleSearchBarFocus = () => {
           fetchLocationSuggestion("");
+        };
+
+        const handleSearch = () => {
+          console.log("Searching for", locationZip);
+          const queryParams = new URLSearchParams({ locationZip });
+          router.push(`/pages/results?${queryParams.toString()}`);
         };
 
         //handles suggestion fetching
@@ -88,6 +94,7 @@ export default function SearchBar() {
             value={locationZip}
             onChange={handleInputChange}
             onFocus={handleSearchBarFocus}
+            onKeyDown={handleEnterKey(handleSearch)}
           />
         </InputGroup>
         
@@ -127,16 +134,11 @@ export default function SearchBar() {
         </Box>  
       )}
       </Stack>
-      <Link href={{
-        pathname: '/pages/results',
-        query: {locationZip: locationZip.toString()},
-      }}>
-         <Box padding="20px 0px">
-            <Button colorScheme="red" size="lg" isDisabled={!location} >
-              <Search2Icon />
-            </Button>
-          </Box>
-      </Link>
+        <Box padding="20px 0px">
+          <Button colorScheme="red" size="lg" isDisabled={!locationZip} onClick={handleSearch}>
+            <Search2Icon />
+          </Button>
+        </Box>
     </Stack>
   );
 };

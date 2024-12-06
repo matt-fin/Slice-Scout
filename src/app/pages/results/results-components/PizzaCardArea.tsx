@@ -7,32 +7,8 @@ import {
 } from "@chakra-ui/react";
 import PizzaCard from "./PizzaCard"
 
-interface Location {
-    street_address: string;
-    zip_code: string;
-    latitude: number;
-    longitude: number;
-    borough: string;
-}
 
-interface Pizzeria {
-    pizzeria_id: bigint;
-    pizzeria_name: string;
-    phone_num: string;
-    open_time: string;
-    closing_time: string;
-    slice_price: number;
-    rating: number;
-    shop_url: string;
-    reviews_url: string;
-    location: Location;
-}
-
-interface PizzaCardAreaProps {
-    pizzerias: Pizzeria[];
-}
-
-export default function PizzaCardArea({ pizzerias }: PizzaCardAreaProps){
+export default function PizzaCardArea({ pizzerias }){
     return (
         <Box 
             flex="1"
@@ -58,10 +34,12 @@ export default function PizzaCardArea({ pizzerias }: PizzaCardAreaProps){
                     name={pizzeria.pizzeria_name}
                     phone={pizzeria.phone_num}
                     hours={`${pizzeria.open_time} - ${pizzeria.closing_time}`}
-                    address={`${pizzeria.location.street_address}, ${pizzeria.location.zip_code}, ${pizzeria.location.borough}`}
+                    address={`${pizzeria.building_number} ${pizzeria.street_address}, ${pizzeria.borough}, New York, ${pizzeria.zip_code}`}
                     price={pizzeria.slice_price}
                     reviewsLink={pizzeria.reviews_url}
                     websiteLink={pizzeria.shop_url}
+                    latitude={pizzeria.latitude}
+                    longitude={pizzeria.longitude}
                     />
                 ))}
             </SimpleGrid>

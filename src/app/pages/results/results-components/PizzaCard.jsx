@@ -41,7 +41,9 @@ const PizzaCard = ({
   address,
   price,
   reviewsLink,
-  websiteLink
+  websiteLink,
+  latitude,
+  longitude,
 }) => {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
@@ -49,6 +51,7 @@ const PizzaCard = ({
   return (
     <Box
       maxW="sm"
+      h="30vh"
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
@@ -66,7 +69,7 @@ const PizzaCard = ({
         
         <HStack>
           <PhoneIcon />
-          <Text>{phone}</Text>
+          <Text textDecor={"underline"}><a href={`tel:${phone}`}>{phone}</a></Text>
         </HStack>
         
         <HStack>
@@ -76,7 +79,13 @@ const PizzaCard = ({
         
         <HStack>
           <InfoIcon />
-          <Text>{address}</Text>
+            <a 
+              href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Text textDecor={"underline"}>{address}</Text>
+            </a>
         </HStack>
         
         <HStack spacing={4} mt={4}>

@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { createClient } from '@supabase/supabase-js';
 import ContactUsButton from "@/components/ContactUsButton";
+import { handleEnterKey } from "@/utils/handleEnterKeyEvents";
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -130,7 +131,7 @@ return (
                 <option value="Bronx">Bronx</option>
             </Select>
           </FormControl>
-          <Button type="submit" colorScheme="orange">
+          <Button type="submit" colorScheme="orange" onKeyDown={handleEnterKey(handleSubmit)}>
             Submit
           </Button>
         </VStack>

@@ -10,6 +10,8 @@ import {
   Text,
   useColorModeValue,
   VisuallyHidden,
+  Button,
+  Link,
 } from "@chakra-ui/react"
 import { FaInstagram, FaTwitter } from "react-icons/fa"
 import { ReactNode } from "react"
@@ -72,21 +74,23 @@ export default function Footer() {
         align={"center"}>
         <Logo />
         <Stack direction={"row"} spacing={6}>
-          <Box as="a" href={"#"} >
+          <Box as="a" href={"#"} fontSize={"lg"} >
             Home
           </Box>
-          <Box as="a" href={"#"}>
-            About Us
-          </Box>
-          <Box as="a" href={"#"}>
+          <Link href="/pages/about">
+              <Button color={"gray.900"} fontSize={"lg"} fontWeight={400} variant={"link"}>
+                About
+              </Button>
+          </Link>
+          <Box as="a" href={"#"} fontSize={"lg"}>
             Account
           </Box>
-          <Box as="a" href={"#"}>
+          <Box as="a" href={"#"} fontSize={"lg"}>
             FAQ
           </Box>
         </Stack>
-        <Box as="a" href={"/pages/submit-form"}>
-            Sourced out a new Location or need to edit a wrong location?
+        <Box as="a" href={"/pages/submit-form"} fontSize={"lg"} textDecor={"underline"} color={"red.800"}>
+            Sourced out a new location or need to edit a wrong one?
         </Box>
       </Container>
 

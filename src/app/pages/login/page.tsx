@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";  // Import next router for page navigation
 import ContactUsButton from "@/components/ContactUsButton";
 import { AuthApiError, createClient, isAuthApiError } from "@supabase/supabase-js";
+import { handleEnterKey } from "@/utils/handleEnterKeyEvents";
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -81,6 +82,7 @@ export default function AuthPage() {
         bg="white"
         borderRadius="lg"
         boxShadow="md"
+        onKeyDown={handleEnterKey(handleAuth)}
       >
         <Heading as="h2" size="lg" textAlign="center" mb={6}>
           {isSignUp ? "Create an Account" : "Sign In"}
