@@ -1,6 +1,6 @@
-'use client';
-import React, { useState } from "react";
-import Image from "next/image";
+"use client";
+
+import React from "react";
 import {
     Box,
     SimpleGrid
@@ -15,8 +15,6 @@ export default function PizzaCardArea({ pizzerias }){
             width="100%"
             minWidth="400px"
             height={{base:"600px"}}
-            border="2px"
-            borderColor={"orange"}
             overflowY={"auto"}
             display="flex"              
             justifyContent="center"    

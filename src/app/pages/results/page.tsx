@@ -1,18 +1,17 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
-    Box,
-    Stack,
-    Text,
-    HStack,
-    Container
-  } from "@chakra-ui/react";
-import MapCaller from "../../../mapcomponents/MapCaller"
+  Box,
+  Stack,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
+import MapCaller from "../../../mapcomponents/MapCaller";
 import SearchBar from '../../../components/SearchBar';
-import Filters from './results-components/Filters'
-import PizzaCardArea from './results-components/PizzaCardArea'
+import Filters from './results-components/Filters';
+import PizzaCardArea from './results-components/PizzaCardArea';
 import ContactUsButton from '@/components/ContactUsButton';
 import { clientConnection } from '@/utils/supabase/server';
 
@@ -126,10 +125,15 @@ export default function Results() {
     };
 
   return (
-    <Box bg="#fffcf5" minHeight="80vh" overflowY={"auto"}>
-        <main>
-        <Stack marginTop="70px" align="center" justify="center" spacing="4">
-            <SearchBar/>
+    <Box bg="#fffcf5" minHeight="80vh" overflowY="auto">
+      <main>
+        <Stack marginTop="70px" align="center" justify="center" spacing={4}>
+          <SearchBar
+            onSearch={(coordinates: [number, number]) => {
+              setMapCenter(coordinates); // Update map center
+              setSearchLocation(`${coordinates[0]}, ${coordinates[1]}`); // Update search location text
+            }}
+          />
         </Stack>
         {showNoResults && (
           <Text fontSize="xl" color="red.500" align="center" w="100%">
@@ -149,8 +153,8 @@ export default function Results() {
                 {<MapCaller pizzerias={mapPizzerias} handlePizzeriaSelection={handlePizzeriaSelection}/>}
             </Box>
         </HStack>
-        <ContactUsButton/>
-        </main>
+        <ContactUsButton />
+      </main>
     </Box>
   );
 }

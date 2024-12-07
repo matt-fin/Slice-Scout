@@ -1,24 +1,22 @@
-//Need to lazy load map component
+import Map from "./Map";
+import * as T from "../libs/types";
 
-'use client';
-
-import dynamic from 'next/dynamic';
-import * as T from '../libs/types'
-
-const LazyMap = dynamic(() => import("./Map"), {
-  ssr: false,
-  loading: () => <p>Loading...</p>,
-});
-
-
-
-interface MapProps {
-    pizzerias: T.Pizzeria[];
-    handlePizzeriaSelection: (id: number) => void;
+interface MapCallerProps {
+  pizzerias: T.Pizzeria[];
+  handlePizzeriaSelection: (id: number) => void;
+  centerCoordinates: [number, number]; // Center coordinates for the map
 }
 
-function MapCaller(props: MapProps) {
-    return <LazyMap {...props}/>;
+export default function MapCaller({
+  pizzerias,
+  handlePizzeriaSelection,
+  centerCoordinates,
+}: MapCallerProps) {
+  return (
+    <Map
+      pizzerias={pizzerias}
+      handlePizzeriaSelection={handlePizzeriaSelection}
+      centerCoordinates={centerCoordinates} // Pass center coordinates to `Map`
+    />
+  );
 }
-
-export default MapCaller;
