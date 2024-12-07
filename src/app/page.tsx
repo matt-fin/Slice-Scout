@@ -14,7 +14,7 @@ export default function Home() {
     <Box bg="#fffcf5">
       <main>
           <Hero/>
-          <Features/>
+          
           <ContactUsButton/>
       </main>
     </Box>
