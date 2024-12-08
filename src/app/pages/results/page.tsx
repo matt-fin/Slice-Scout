@@ -43,7 +43,6 @@ interface PizzeriaMapping {
 }
 
 export default function Results() {
-  //const router = useRouter();
   const searchParams = useSearchParams();
   const [searchLocation, setSearchLocation] = useState('');
   //query once and store data in instance
@@ -51,6 +50,7 @@ export default function Results() {
   const [allPizzerias, setAllPizzerias] = useState<Pizzeria[]>([]);
   const [mapPizzerias, setMapPizzerias] = useState<PizzeriaMapping[]>([]);
   const [showNoResults, setShowNoResults] = useState(false); //for when no results are shown
+  const [centerCoordinates, setCenterCoordinates] = useState<[number, number]>([40.758896, -73.985130]);
 
     useEffect(() => {
       
@@ -118,8 +118,30 @@ export default function Results() {
           return () => clearTimeout(timeoutId);
         }
       }
+
+      const BASE_URL = "https://api.geoapify.com/v1/geocode/search";
+      const API_KEY = "ecd6fc145e144344af43dab38ba513e4";
+
+          // Geocode the zip code to get coordinates and pan the map
+      const geocodeZipCode = async (zip: string) => {
+        const response = await fetch(`${BASE_URL}?postcode=${zip}&city=new%20york&country=united%20states&format=json&apiKey=${API_KEY}`);
+        const data = await response.json();
+        console.log(data.results[0].lat, data.results[0].lon);
+
+        if (data.results && data.results.length > 0) {
+          const lat = data.results[0].lat;
+          const lon = data.results[0].lon;
+          setCenterCoordinates([lat, lon]); // Update the map center coordinates
+        }
+      };
+
+      if (locationZip) {
+        geocodeZipCode(locationZip);
+        console.log("current state", centerCoordinates)
+      }
     }, [searchParams, allPizzerias]);
 
+    
     const handlePizzeriaSelection = (id: number) => {
         console.log("Selected Pizzeria ID:", id);
     };
@@ -130,7 +152,7 @@ export default function Results() {
         <Stack marginTop="70px" align="center" justify="center" spacing={4}>
           <SearchBar
             onSearch={(coordinates: [number, number]) => {
-              setMapCenter(coordinates); // Update map center
+              setCenterCoordinates(coordinates); // Update map center
               setSearchLocation(`${coordinates[0]}, ${coordinates[1]}`); // Update search location text
             }}
           />
@@ -150,7 +172,7 @@ export default function Results() {
             <Filters/>
             <PizzaCardArea pizzerias={filteredPizzerias}/>
             <Box display="flex" justifyContent="flex-end">
-                {<MapCaller pizzerias={mapPizzerias} handlePizzeriaSelection={handlePizzeriaSelection}/>}
+                {<MapCaller pizzerias={mapPizzerias} handlePizzeriaSelection={handlePizzeriaSelection} centerCoordinates={centerCoordinates}/>}
             </Box>
         </HStack>
         <ContactUsButton />

@@ -9,16 +9,16 @@ import "leaflet-defaulticon-compatibility";
 
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
-//import PizzaIcon from '../public/pizza_mapicon.png'
 import * as T from '../libs/types'
 
 interface MapProps {
-    pizzerias: T.Pizzeria[];
-    handlePizzeriaSelection: (id: number) => void;
-    iconUrl?: string;
+    readonly pizzerias: T.Pizzeria[];
+    readonly handlePizzeriaSelection: (id: number) => void;
+    readonly centerCoordinates: [number, number];
+    readonly iconUrl?: string;
 }
 
-export default function Map({pizzerias, handlePizzeriaSelection, iconUrl= '/pizza_mapicon.png'}: MapProps) {
+export default function Map({pizzerias, handlePizzeriaSelection, centerCoordinates, iconUrl= '/pizza_mapicon.png'}: Readonly<MapProps>) {
     
     //Can extend Icon to customize further
     const pizzaIcon = new Icon({
@@ -48,7 +48,7 @@ export default function Map({pizzerias, handlePizzeriaSelection, iconUrl= '/pizz
 
     return (
     <MapContainer
-        center={[40.758896, -73.985130]} // Times Square coordinates
+        center={centerCoordinates} // Times Square coordinates
         zoom={12}
         scrollWheelZoom={true}
         style={{ height: "600px", width: "400px" }}

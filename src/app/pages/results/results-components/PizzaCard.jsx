@@ -152,6 +152,7 @@ function PizzaCard({
     <>
       <Box
         maxW="sm"
+        h="30vh"
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -180,8 +181,23 @@ function PizzaCard({
 
           <HStack>
             <InfoIcon />
-            <Text>{address}</Text>
-          </HStack>
+              <a 
+                href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+            <Text textDecor={"underline"}>{address}</Text>
+              </a>
+            </HStack>
+
+            <HStack spacing={4} mt={4}>
+              <Button as="a" href={reviewsLink} target="_blank" colorScheme="blue" size="sm">
+                Reviews
+              </Button>
+              <Button as="a" href={websiteLink} target="_blank" colorScheme="green" size="sm">
+                Website
+              </Button>
+            </HStack>
         </VStack>
       </Box>
 
@@ -221,6 +237,15 @@ function PizzaCard({
                     >
                     <Text textDecor={"underline"}>{address}</Text>
                     </a>
+                  </HStack>
+
+                  <HStack spacing={4} mt={4}>
+                    <Button as="a" href={reviewsLink} target="_blank" colorScheme="blue" size="sm">
+                      Reviews
+                    </Button>
+                    <Button as="a" href={websiteLink} target="_blank" colorScheme="green" size="sm">
+                      Website
+                    </Button>
                   </HStack>
                 </HStack>
               </Box>
