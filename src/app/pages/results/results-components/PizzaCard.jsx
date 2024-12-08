@@ -35,6 +35,12 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { Icon } from "leaflet";
+// Import a default or custom icon if you want
+// Example: const pizzaIcon = new Icon({ iconUrl: '/pizza_mapicon.png', iconSize: [25, 41] });
+
+// Register chart components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -54,26 +60,25 @@ function PizzaCard({
   reviewsLink,
   websiteLink,
   images = [],
-  priceHistory = []
+  priceHistory = [],
+  latitude,
+  longitude
 }) {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
 
-  // Keep price history in a local state so we can update it.
   const [history, setHistory] = useState(priceHistory);
 
-  // State for the detail modal
+  // Detail modal states
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
-  // State for the separate vote modal
+  // Vote modal states
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState("0.99");
   const [customPrice, setCustomPrice] = useState("");
 
   const openDetailModal = () => setIsDetailOpen(true);
-  const closeDetailModal = () => {
-    setIsDetailOpen(false);
-  };
+  const closeDetailModal = () => setIsDetailOpen(false);
 
   const openVoteModal = () => {
     setSelectedPrice("0.99");
@@ -89,17 +94,13 @@ function PizzaCard({
     const votedPrice = parseFloat(customPrice || selectedPrice);
     if (isNaN(votedPrice)) return;
 
-    // Add the new entry to the price history
     const newEntry = {
-      date: new Date().toISOString().slice(0,10), // e.g. "2024-06-01"
+      date: new Date().toISOString().slice(0,10),
       price: votedPrice
     };
 
-    setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date))); 
-    // Sorting ensures the chart remains chronological if needed
-
+    setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date)));
     console.log(`User voted for $${votedPrice} for ${name}`);
-    // Here you could also make an API call to persist this data in your backend
 
     closeVoteModal();
   };
@@ -122,29 +123,16 @@ function PizzaCard({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom',
-      },
-      title: {
-        display: true,
-        text: 'Slice Price Over Time',
-      },
+      legend: { position: 'bottom' },
+      title: { display: true, text: 'Slice Price Over Time' },
     },
     scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Price ($)'
-        }
-      }
+      x: { title: { display: true, text: 'Date' } },
+      y: { title: { display: true, text: 'Price ($)' } }
     }
   };
+
+  const latestPrice = history.length > 0 ? history[history.length - 1].price : null;
 
   return (
     <>
@@ -161,6 +149,21 @@ function PizzaCard({
         onClick={openDetailModal}
         _hover={{ boxShadow: "md" }}
       >
+        {latestPrice !== null && (
+          <Box
+            position="absolute"
+            top="4px"
+            right="4px"
+            bg="orange.200"
+            px={2}
+            py={1}
+            borderRadius="md"
+            fontWeight="bold"
+          >
+            ${latestPrice.toFixed(2)}
+          </Box>
+        )}
+
         <VStack align="start" spacing={3}>
           <Text fontSize="xl" fontWeight="semibold">
             {name}
@@ -195,78 +198,77 @@ function PizzaCard({
         <ModalContent>
           <ModalHeader>{name} Details</ModalHeader>
           <ModalBody overflowY="auto" maxH="80vh">
-            <VStack align="stretch" spacing={6}>
-              {/* Info Section */}
-              <Box>
-                <Text fontSize="2xl" fontWeight="bold" mb={2}>
-                  {name}
-                </Text>
-                <HStack spacing={4}>
-                  <HStack>
-                    <PhoneIcon />
-                    <Text>{phone}</Text>
+            {/* Use a horizontal layout (HStack) to display info + chart on the left and map on the right */}
+            <HStack align="start" spacing={6}>
+              <VStack align="stretch" spacing={6} flex="2">
+                {/* Info Section */}
+                <Box>
+                  <Text fontSize="2xl" fontWeight="bold" mb={2}>
+                    {name}
+                  </Text>
+                  <HStack spacing={4}>
+                    <HStack>
+                      <PhoneIcon />
+                      <Text>{phone}</Text>
+                    </HStack>
+                    <HStack>
+                      <TimeIcon />
+                      <Text>{hours}</Text>
+                    </HStack>
+                    <HStack>
+                      <InfoIcon />
+                      <Text>{address}</Text>
+                    </HStack>
                   </HStack>
-                  <HStack>
-                    <TimeIcon />
-                    <Text>{hours}</Text>
-                  </HStack>
-                  <HStack>
-                    <InfoIcon />
-                    <Text>{address}</Text>
-                  </HStack>
-                </HStack>
-              </Box>
+                </Box>
 
-              <Divider />
 
-              {/* Images Section */}
-              <Box>
-                <Text fontSize="xl" fontWeight="semibold" mb={2}>
-                  Images
-                </Text>
-                <HStack spacing={4} overflowX="auto">
-                  {images.length > 0 ? (
-                    images.map((imgSrc, i) => (
-                      <Image
-                        key={i}
-                        src={imgSrc}
-                        alt={`${name} image ${i + 1}`}
-                        boxSize="200px"
-                        objectFit="cover"
-                        borderRadius="md"
-                      />
-                    ))
+
+                {/* Chart and Price History Section */}
+                <Box height="300px">
+                  <Text fontSize="xl" fontWeight="semibold" mb={2}>
+                    Slice Price History
+                  </Text>
+                  {history.length ? (
+                    <Box width="100%" height="100%">
+                      <Line data={chartData} options={chartOptions} />
+                    </Box>
                   ) : (
-                    <Text>No images available</Text>
+                    <Text>No price history available</Text>
                   )}
-                </HStack>
-              </Box>
+                </Box>
 
-              <Divider />
+                <Divider />
 
-              {/* Chart and Price History Section */}
-              <Box height="300px">
-                <Text fontSize="xl" fontWeight="semibold" mb={2}>
-                  Slice Price History
-                </Text>
-                {history.length ? (
-                  <Box width="100%" height="100%">
-                    <Line data={chartData} options={chartOptions} />
-                  </Box>
+                {/* Vote on Slice Price Button */}
+                <Box>
+                  <Button colorScheme="orange" onClick={openVoteModal}>
+                    Vote on Slice Price
+                  </Button>
+                </Box>
+              </VStack>
+
+              {/* Map Section - Right Side */}
+              <Box flex="1" minWidth="300px" height="600px" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                {latitude && longitude ? (
+                  <MapContainer
+                    center={[latitude, longitude]}
+                    zoom={15}
+                    scrollWheelZoom={false}
+                    style={{ width: '100%', height: '100%' }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    />
+                    <Marker position={[latitude, longitude]}>
+                    </Marker>
+                  </MapContainer>
                 ) : (
-                  <Text>No price history available</Text>
+                  <Text>No coordinates available for mapping</Text>
                 )}
               </Box>
-
-              <Divider />
-
-              {/* Vote on Slice Price Button */}
-              <Box>
-                <Button colorScheme="orange" onClick={openVoteModal}>
-                  Vote on Slice Price
-                </Button>
-              </Box>
-            </VStack>
+            </HStack>
           </ModalBody>
           <ModalFooter>
             <Button onClick={closeDetailModal}>Close</Button>

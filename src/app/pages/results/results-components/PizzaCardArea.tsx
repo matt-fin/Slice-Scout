@@ -16,6 +16,8 @@ export default function PizzaCardArea(){
             phone="(718) 492-9735"
             hours="11pm EST"
             address="5806 5th Ave, Brooklyn, NY 11220"
+            latitude={40.6411441}
+            longitude={-74.0155299}
             price={2}
             reviewsLink="https://www.yelp.com/biz/johnnys-pizzeria-brooklyn-2"
             websiteLink="http://www.johnnyspizzeria.com/"
