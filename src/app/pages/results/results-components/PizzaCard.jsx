@@ -37,6 +37,7 @@ import { Line } from 'react-chartjs-2';
 
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
+import { createClient } from "@supabase/supabase-js";
 // Import a default or custom icon if you want
 // Example: const pizzaIcon = new Icon({ iconUrl: '/pizza_mapicon.png', iconSize: [25, 41] });
 
@@ -52,6 +53,7 @@ ChartJS.register(
 );
 
 function PizzaCard({
+  id,
   name,
   phone,
   hours,
@@ -66,6 +68,8 @@ function PizzaCard({
 }) {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
+
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
   const [history, setHistory] = useState(priceHistory);
 
@@ -90,7 +94,7 @@ function PizzaCard({
     setIsVoteModalOpen(false);
   };
 
-  const handleVote = () => {
+  const handleVote = async () => {
     const votedPrice = parseFloat(customPrice || selectedPrice);
     if (isNaN(votedPrice)) return;
 
@@ -98,6 +102,23 @@ function PizzaCard({
       date: new Date().toISOString().slice(0,10),
       price: votedPrice
     };
+
+    //checks if price with associated pizzeria exists
+    const { data, error } = await supabase
+    .from('prices')
+    .select()
+    .eq('pizzeria_id', id)
+    .eq('price', votedPrice);
+    
+    //price exists for current pizzeria
+    if (data !== null && data.length) {
+      const {error} = await supabase.rpc('increment_price', { row_id: data[0]["id"] })
+    }
+    else {
+      const { error } = await supabase
+                          .from('prices')
+                          .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
+    }
 
     setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date)));
     console.log(`User voted for $${votedPrice} for ${name}`);

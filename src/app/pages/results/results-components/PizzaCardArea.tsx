@@ -12,6 +12,7 @@ export default function PizzaCardArea(){
     const testCard = () => {
         return (
           <PizzaCard
+            id={3}
             name="Johnny's Pizzeria"
             phone="(718) 492-9735"
             hours="11pm EST"
