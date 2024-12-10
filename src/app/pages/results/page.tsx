@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   HStack,
+  Button
 } from "@chakra-ui/react";
 import MapCaller from "../../../mapcomponents/MapCaller";
 import SearchBar from '../../../components/SearchBar';
@@ -52,7 +53,7 @@ export default function Results() {
   const [showNoResults, setShowNoResults] = useState(false); //for when no results are shown
   const [centerCoordinates, setCenterCoordinates] = useState<[number, number]>([40.758896, -73.985130]);
 
-  //pagination states
+        //pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 10;
 
@@ -150,27 +151,29 @@ export default function Results() {
         console.log("Selected Pizzeria ID:", id);
     };
 
-    const handlePaginationScroll = (e: React.UIEvent<HTMLElement>) => {
-      const bottom = e.currentTarget.scrollHeight === e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+          //pagination
+          const paginatePizzerias = () => {
+            const startIndex = (currentPage - 1) * resultsPerPage;
+            const endIndex = startIndex + resultsPerPage;
+            return filteredPizzerias.slice(startIndex, endIndex);
+        }
       
-      if(bottom && filteredPizzerias.length > currentPage * resultsPerPage){
-        loadMore();
-      }
-    }
-
-    //pagination
-    const paginatePizzerias = () => {
-      const startIndex = (currentPage - 1) * resultsPerPage;
-      const endIndex = startIndex + resultsPerPage;
-      return filteredPizzerias.slice(startIndex, endIndex);
-    }
-
-    const loadMore = () => {
-      setCurrentPage(currentPage + 1);
-    }
+      // Handle Next Page
+        const handleNextPage = () => {
+            if (currentPage * resultsPerPage < filteredPizzerias.length) {
+                setCurrentPage(currentPage + 1);
+            }
+        };
+    
+        // Handle Previous Page
+        const handlePrevPage = () => {
+            if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            }
+        };
 
   return (
-    <Box bg="#fffcf5" height="800px" overflowY="auto" onScroll={handlePaginationScroll}>
+    <Box bg="#fffcf5" minHeight="80vh" overflowY="auto">
       <main>
         <Stack marginTop="70px" align="center" justify="center" spacing={4}>
           <SearchBar
@@ -197,6 +200,22 @@ export default function Results() {
             <Box display="flex" justifyContent="flex-end">
                 {<MapCaller pizzerias={mapPizzerias} handlePizzeriaSelection={handlePizzeriaSelection} centerCoordinates={centerCoordinates}/>}
             </Box>
+        </HStack>
+        <HStack spacing={4} justify="center" mt={4} mb={"25px"}>
+            <Button
+              onClick={handlePrevPage}
+              isDisabled={currentPage === 1}
+              colorScheme="teal"
+            >
+            Previous
+            </Button>
+            <Button
+              onClick={handleNextPage}
+              isDisabled={currentPage * resultsPerPage >= filteredPizzerias.length}
+              colorScheme="teal"
+            >
+            Next
+            </Button>
         </HStack>
         <ContactUsButton />
       </main>

@@ -3,12 +3,13 @@
 import React from "react";
 import {
     Box,
-    SimpleGrid
+    SimpleGrid,
 } from "@chakra-ui/react";
 import PizzaCard from "./PizzaCard"
 
 
 export default function PizzaCardArea({ pizzerias }){
+
     return (
         <Box 
             flex="1"
@@ -19,7 +20,7 @@ export default function PizzaCardArea({ pizzerias }){
             display="flex"              
             justifyContent="center"    
             alignItems="flex-start"
-        >   
+        > 
             <SimpleGrid 
                 columns={2}
                 spacing={8}
@@ -42,5 +43,6 @@ export default function PizzaCardArea({ pizzerias }){
                 ))}
             </SimpleGrid>
         </Box>
+        
     )
-}
+};
