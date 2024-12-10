@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ticket_message: message,
                     ticket_status: 'Pending'
                 }
-            ])//.select('ticket_id');
+            ])
 
         if (error) {
             console.error('Supabase insertion failed:', error);

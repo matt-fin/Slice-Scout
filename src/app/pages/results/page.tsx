@@ -52,12 +52,16 @@ export default function Results() {
   const [showNoResults, setShowNoResults] = useState(false); //for when no results are shown
   const [centerCoordinates, setCenterCoordinates] = useState<[number, number]>([40.758896, -73.985130]);
 
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 10;
+
     useEffect(() => {
       
       const fetchAllPizzerias = async () => {
         const supabase = await clientConnection();
 
-        const { data: mergedData, error: mergeError } = await supabase.from('pizzeria_locations').select(`
+        const { data: mergedData, error: mergeError } = await supabase.from('test_pizzerias').select(`
           pizzeria_id, 
           pizzeria_name,
           open_time,
@@ -146,8 +150,27 @@ export default function Results() {
         console.log("Selected Pizzeria ID:", id);
     };
 
+    const handlePaginationScroll = (e: React.UIEvent<HTMLElement>) => {
+      const bottom = e.currentTarget.scrollHeight === e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+      
+      if(bottom && filteredPizzerias.length > currentPage * resultsPerPage){
+        loadMore();
+      }
+    }
+
+    //pagination
+    const paginatePizzerias = () => {
+      const startIndex = (currentPage - 1) * resultsPerPage;
+      const endIndex = startIndex + resultsPerPage;
+      return filteredPizzerias.slice(startIndex, endIndex);
+    }
+
+    const loadMore = () => {
+      setCurrentPage(currentPage + 1);
+    }
+
   return (
-    <Box bg="#fffcf5" minHeight="80vh" overflowY="auto">
+    <Box bg="#fffcf5" height="800px" overflowY="auto" onScroll={handlePaginationScroll}>
       <main>
         <Stack marginTop="70px" align="center" justify="center" spacing={4}>
           <SearchBar
@@ -170,7 +193,7 @@ export default function Results() {
             w={"100%"} 
             padding="10px 20px">
             <Filters/>
-            <PizzaCardArea pizzerias={filteredPizzerias}/>
+            <PizzaCardArea pizzerias={paginatePizzerias()}/>
             <Box display="flex" justifyContent="flex-end">
                 {<MapCaller pizzerias={mapPizzerias} handlePizzeriaSelection={handlePizzeriaSelection} centerCoordinates={centerCoordinates}/>}
             </Box>
