@@ -205,14 +205,14 @@ export default function Results() {
             <Button
               onClick={handlePrevPage}
               isDisabled={currentPage === 1}
-              colorScheme="teal"
+              colorScheme="orange"
             >
             Previous
             </Button>
             <Button
               onClick={handleNextPage}
               isDisabled={currentPage * resultsPerPage >= filteredPizzerias.length}
-              colorScheme="teal"
+              colorScheme='orange'
             >
             Next
             </Button>
