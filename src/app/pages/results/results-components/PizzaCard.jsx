@@ -164,7 +164,7 @@ function PizzaCard({
     const { data, error } = await supabase
       .from("prices")
       .select()
-      .eq("pizzeria_id", id)
+      .eq("pizzeria_id", key)
       .eq("price", votedPrice);
 
     if (error) {
@@ -180,7 +180,7 @@ function PizzaCard({
     } else {
       const { error: insertError } = await supabase
         .from("prices")
-        .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
+        .insert({ pizzeria_id: key, price: votedPrice, votes: 1 });
       if (insertError) console.error(insertError);
     }
 

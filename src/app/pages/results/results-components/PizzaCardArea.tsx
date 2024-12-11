@@ -58,7 +58,7 @@ export default function PizzaCardArea({ pizzerias }){
                 >
                 {pizzerias.map((pizzeria) => (
                     <PizzaCard
-                    key={pizzeria.pizzeria_id.toString()}
+                    key={pizzeria.pizzeria_id}
                     name={pizzeria.pizzeria_name}
                     phone={pizzeria.phone_num}
                     hours={`${pizzeria.open_time ? pizzeria.open_time : ''} - ${pizzeria.closing_time ? pizzeria.closing_time : ''}`}
