@@ -11,7 +11,7 @@ import ContactUsButton from "../components/ContactUsButton"
 export default function Home() {
   return (
 
-    <Box bg="#fffcf5">
+    <Box bg="#fcfaeb">
       <main>
           <Hero/>
           <Features/>

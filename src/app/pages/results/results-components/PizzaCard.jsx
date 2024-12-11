@@ -96,7 +96,10 @@ function PizzaCard({
   priceHistory = [],
   demoMode = false
 }) {
-  const cardBg = useColorModeValue("gray.100", "gray.700");
+  const cardBg = useColorModeValue(
+    "linear-gradient(to right, rgba(255, 0, 0, 0.2), rgba(255, 165, 0, 0.2))", 
+    "linear-gradient(to right, rgba(255, 0, 0, 0.2), rgba(255, 165, 0, 0.2))"
+  );
   const textColor = useColorModeValue("gray.800", "gray.100");
 
   const supabase = createClient(
