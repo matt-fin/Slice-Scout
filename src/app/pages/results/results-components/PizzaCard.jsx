@@ -73,7 +73,7 @@ const PriceIndicator = ({ price }) => {
       fontWeight="bold"
     >
       {Array.from({ length: price }).map((_, i) => (
-        <Text as="span" key={i} color={getColor(i + 1)}>
+        <Text as="span" id={i} color={getColor(i + 1)}>
           $
         </Text>
       ))}
@@ -166,7 +166,7 @@ function PizzaCard({
     const { data, error } = await supabase
       .from("prices")
       .select()
-      .eq("pizzeria_id", key)
+      .eq("pizzeria_id", id)
       .eq("price", votedPrice);
 
     if (error) {
