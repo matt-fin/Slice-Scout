@@ -44,9 +44,32 @@ const PizzaCard = ({
   websiteLink,
   latitude,
   longitude,
+  demoMode = false
 }) => {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
+
+  // Demo mode data
+  const demoData = {
+    name: "Slice of Heaven Pizza",
+    phone: "(555) 123-4567",
+    hours: "9 PM",
+    address: "123 Pizza Street, Foodville, CA 90210",
+    price: 3,
+    reviewsLink: "https://example.com/reviews",
+    websiteLink: "https://example.com/pizza",
+  };
+
+  // Use demo data if demoMode is true
+  const displayData = demoMode ? demoData : {
+    name, 
+    phone, 
+    hours, 
+    address, 
+    price, 
+    reviewsLink, 
+    websiteLink
+  };
 
   return (
     <Box
@@ -60,43 +83,42 @@ const PizzaCard = ({
       position="relative"
       p={4}
     >
-      <PriceIndicator price={price} />
+      <PriceIndicator price={displayData.price} />
       
       <VStack align="start" spacing={3}>
         <Text fontSize="xl" fontWeight="semibold">
-          {name}
+          {displayData.name}
         </Text>
         
         <HStack>
           <PhoneIcon />
-          <Text textDecor={"underline"}><a href={`tel:${phone}`}>{phone}</a></Text>
+          <Text textDecor={"underline"}><a href={`tel:${displayData.phone}`}>{displayData.phone}</a></Text>
         </HStack>
         
         <HStack>
           <TimeIcon />
-          <Text>Closes at: {hours}</Text>
+          <Text>Closes at: {displayData.hours}</Text>
         </HStack>
         
         <HStack>
           <InfoIcon />
             <a 
-              href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`} 
+              href={`https://www.google.com/maps?q=${encodeURIComponent(displayData.address)}`} 
               target="_blank" 
               rel="noopener noreferrer"
             >
-              <Text textDecor={"underline"}>{address}</Text>
+              <Text textDecor={"underline"}>{displayData.address}</Text>
             </a>
         </HStack>
         
         <HStack spacing={4} mt={4}>
-          <Button as="a" href={reviewsLink} target="_blank" colorScheme="blue" size="sm">
+          <Button as="a" href={displayData.reviewsLink} target="_blank" colorScheme="blue" size="sm">
             Reviews
           </Button>
-          {websiteLink && (
-            <Button as="a" href={websiteLink} target="_blank" colorScheme="green" size="sm">
+          {displayData.websiteLink && (
+            <Button as="a" href={displayData.websiteLink} target="_blank" colorScheme="green" size="sm">
               Website
             </Button>
-
           )}
         </HStack>
       </VStack>

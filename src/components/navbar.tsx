@@ -58,7 +58,7 @@ export default function Navbar() {
         px={{ base: 4 }}
         borderBottom={2}
         borderStyle={"solid"}
-        borderColor={useColorModeValue("gray.100", "gray.900")}
+        borderColor={useColorModeValue("red.200", "red.400")}
         align={"center"}
         zIndex={3000}>
         <Flex justify={{ base: "center" }}>

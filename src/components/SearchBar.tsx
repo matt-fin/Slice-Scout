@@ -83,29 +83,37 @@ export default function SearchBar() {
 
   return (
     <Stack direction="row" spacing={2}>
-      {/*Search Bar*/}
-      <Stack direction="column" align="center" w="100%" padding="20px 0px">
-        <InputGroup flex="3">
+      <Box flex="1" position="relative">
+        <InputGroup>
           <Input
             placeholder="Enter a zip code to search for shops nearby"
             size={{base: "sm", md: "md", lg: "lg"}}
-            variant="fill"
-            htmlSize={40}
+            variant="filled"
             value={locationZip}
             onChange={handleInputChange}
             onFocus={handleSearchBarFocus}
             onKeyDown={handleEnterKey(handleSearch)}
+            borderRadius="10px 0 0 10px"
+            paddingRight="50px"
           />
+          <Button
+            colorScheme="red"
+            size="lg"
+            isDisabled={!locationZip}
+            onClick={handleSearch}
+            borderRadius="0 10px 10px 0"
+          >
+            <Search2Icon />
+          </Button>
         </InputGroup>
-        
         {showSuggestions && (
-          <Box 
+          <Box
             position="absolute"
-            margin={"48px"}
+            marginTop="8px"
             bg="rgba(255,255,255,.8)"
-            w={"29vw"}
-            borderRadius="md"
-            zIndex={"1300"}
+            w="100%"
+            borderRadius="10px 10px 10px 10px"
+            zIndex="1300"
           >
             {suggestions.map((suggestion) => (
               <Stack
@@ -113,7 +121,7 @@ export default function SearchBar() {
                 direction="row"
                 align="center"
                 p={3}
-                _hover={{bg: "gray.100", cursor: "pointer"}}
+                _hover={{bg: "gray.100", cursor: "pointer", borderRadius: "10px 10px 10px 10px"}}
                 onClick={() => handleSuggestionClick(suggestion)}
               >
                 {suggestion.name === "Current Location" && (
@@ -123,9 +131,8 @@ export default function SearchBar() {
               </Stack>
             ))}
           </Box>
-        )
-      }
-
+        )}
+      </Box>
       {showSearchResults && (
         <Box>
           <Text>
@@ -133,12 +140,6 @@ export default function SearchBar() {
           </Text>
         </Box>  
       )}
-      </Stack>
-        <Box padding="20px 0px">
-          <Button colorScheme="red" size="lg" isDisabled={!locationZip} onClick={handleSearch}>
-            <Search2Icon />
-          </Button>
-        </Box>
     </Stack>
   );
-};
+}
