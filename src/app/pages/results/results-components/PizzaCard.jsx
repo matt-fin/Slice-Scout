@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import {
   Box,
+  Badge,
   Text,
   useColorModeValue,
   VStack,
@@ -22,7 +23,6 @@ import {
   Divider
 } from "@chakra-ui/react";
 import { PhoneIcon, TimeIcon, InfoIcon } from "@chakra-ui/icons";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,6 +35,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+//Code
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -44,6 +45,37 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+const PriceIndicator = ({ price }) => {
+  const bgColor = useColorModeValue("green.100", "green.900");
+  const textColor = useColorModeValue("green.800", "green.100");
+  
+  const getColor = (level) => {
+    const colors = ["green.300", "green.500", "green.700"];
+    return colors[level - 1] || colors[0];
+  };
+
+  return (
+    <Badge
+      position="absolute"
+      top={2}
+      right={2}
+      px={2}
+      py={1}
+      borderRadius="full"
+      bg={bgColor}
+      textTransform="uppercase"
+      fontSize="xs"
+      fontWeight="bold"
+    >
+      {Array.from({ length: price }).map((_, i) => (
+        <Text as="span" key={i} color={getColor(i + 1)}>
+          $
+        </Text>
+      ))}
+    </Badge>
+  );
+};
 
 function PizzaCard({
   name,
@@ -56,7 +88,8 @@ function PizzaCard({
   latitude,
   longitude,
   images = [],
-  priceHistory = []
+  priceHistory = [],
+  demoMode = false
 }) {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
@@ -71,6 +104,28 @@ function PizzaCard({
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState("0.99");
   const [customPrice, setCustomPrice] = useState("");
+
+    // Demo mode data
+  const demoData = {
+    name: "Slice of Heaven Pizza",
+    phone: "(555) 123-4567",
+    hours: "10 AM - 9 PM",
+    address: "123 Pizza Street, Foodville, CA 90210",
+    price: 3,
+    reviewsLink: "https://example.com/reviews",
+    websiteLink: "https://example.com/pizza",
+  };
+  
+    // Use demo data if demoMode is true
+  const displayData = demoMode ? demoData : {
+    name, 
+    phone, 
+    hours, 
+    address, 
+    price, 
+    reviewsLink, 
+    websiteLink
+  };
 
   const openDetailModal = () => setIsDetailOpen(true);
   const closeDetailModal = () => {
@@ -164,29 +219,31 @@ function PizzaCard({
         onClick={openDetailModal}
         _hover={{ boxShadow: "md" }}
       >
+        <PriceIndicator price={displayData.price} />
+
         <VStack align="start" spacing={3}>
           <Text fontSize="xl" fontWeight="semibold">
-            {name}
+            {displayData.name}
           </Text>
 
           <HStack>
             <PhoneIcon />
-            <Text textDecor={"underline"}><a href={`tel:${phone}`}>{phone}</a></Text>
+            <Text textDecor={"underline"}><a href={`tel:${displayData.phone}`}>{displayData.phone}</a></Text>
           </HStack>
 
           <HStack>
             <TimeIcon />
-            <Text>{hours}</Text>
+            <Text>{displayData.hours}</Text>
           </HStack>
 
           <HStack>
             <InfoIcon />
               <a 
-                href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`} 
+                href={`https://www.google.com/maps?q=${encodeURIComponent(displayData.address)}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-            <Text textDecor={"underline"}>{address}</Text>
+            <Text textDecor={"underline"}>{displayData.address}</Text>
               </a>
             </HStack>
 

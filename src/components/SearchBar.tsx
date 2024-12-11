@@ -79,7 +79,7 @@ export default function SearchBar() {
         };
 
         //handles suggestion fetching
-        useEffect(() => {getSuggestions()}, [location]);
+        useEffect(() => {getSuggestions()}, [locationZip]);
 
   return (
     <Stack direction="row" spacing={2}>

@@ -9,8 +9,6 @@ import {
   Heading,
   Input,
   Button,
-  Stack,
-  Divider,
   VStack,
   Avatar,
   InputGroup,

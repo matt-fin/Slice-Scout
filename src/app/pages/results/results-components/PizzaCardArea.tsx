@@ -32,7 +32,7 @@ export default function PizzaCardArea({ pizzerias }){
                     key={pizzeria.pizzeria_id.toString()}
                     name={pizzeria.pizzeria_name}
                     phone={pizzeria.phone_num}
-                    hours={`${pizzeria.open_time} - ${pizzeria.closing_time}`}
+                    hours={`${pizzeria.open_time ? pizzeria.open_time : ''} - ${pizzeria.closing_time ? pizzeria.closing_time : ''}`}
                     address={`${pizzeria.building_number} ${pizzeria.street_address}, ${pizzeria.borough}, New York, ${pizzeria.zip_code}`}
                     price={pizzeria.slice_price}
                     reviewsLink={pizzeria.reviews_url}

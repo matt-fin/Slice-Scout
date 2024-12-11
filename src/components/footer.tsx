@@ -109,8 +109,8 @@ export default function Footer() {
               mb={4}
             >
               <Link href="/">Home</Link>
-              <Link href="/about">About Us</Link>
-              <Link href="/account">Account</Link>
+              <Link href="/pages/about">About Us</Link>
+              <Link href="/pages/profile">Account</Link>
               <Link href="/faq">FAQ</Link>
             </Flex>
 

@@ -173,7 +173,7 @@ export default function Results() {
         };
 
   return (
-    <Box bg="#fffcf5" minHeight="80vh" overflowY="auto">
+    <Box bg="#fffcf5" minHeight="80vh" overflowY="auto" mt={"20px"}>
       <main>
         <Stack marginTop="70px" align="center" justify="center" spacing={4}>
           <SearchBar
