@@ -243,7 +243,7 @@ export default function About() {
                   textAlign="center"
                   maxW="300px"
                   p="4"
-                  bg="#FF4500"
+                  bg="#DD7117"
                   borderRadius="lg"
                   shadow="xl"
                   color="white"
@@ -277,7 +277,7 @@ export default function About() {
               transform="translateX(-50%)"
               width="90%"
               height="130%"
-              bg="#FF4500"
+              bg="#DD7117"
               zIndex={2}
               borderRadius="lg"
             />

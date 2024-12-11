@@ -249,7 +249,7 @@ function PizzaCard({
     <>
       <Box
         maxW="sm"
-        h="30vh"
+        h="32vh"
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -278,14 +278,12 @@ function PizzaCard({
         <PriceIndicator price={displayData.price} />
 
         <VStack align="start" spacing={3}>
-          <HStack spacing={4}>
-            <Text fontSize="xl" fontWeight="semibold">
-              {displayData.name}
-            </Text>
-            <Text fontSize="sm" textColor={"#808080"}>
-              Pizzeria#{displayData.id}
-            </Text>
-          </HStack>
+          <Text fontSize="xl" fontWeight="semibold">
+            {displayData.name}
+          </Text>
+          <Text fontSize="sm" textColor={"#808080"} mt={"-20px"}>
+            Pizzeria#{displayData.id}
+          </Text>
           <HStack>
             <PhoneIcon />
             <Text textDecor={"underline"}>
