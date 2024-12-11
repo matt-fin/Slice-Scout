@@ -77,7 +77,8 @@ export default function Results() {
           latitude,
           longitude,
           borough,
-          building_number`
+          building_number,
+          mean_prices(mean_price, timestamp)`
           );
           if (mergeError) {
             console.error("Error fetching pizzerias:", mergeError);
