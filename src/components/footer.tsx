@@ -1,29 +1,35 @@
 "use client"
-
-import {
-  Box,
-  chakra,
-  Container,
-  Image,
-  Flex,
-  Stack,
-  Text,
-  useColorModeValue,
-  VisuallyHidden,
+import { 
+  Box, 
+  chakra, 
+  Container, 
+  Image, 
+  Flex, 
+  Stack, 
+  Text, 
+  Button,
+  VisuallyHidden 
 } from "@chakra-ui/react"
 import { FaInstagram, FaTwitter } from "react-icons/fa"
 import { ReactNode } from "react"
+import Link from "next/link"
+import SliceScoutLogo from "../../public/slicescoutlogo.png"
 
-const Logo = () => {
+const Logo = ({ 
+  width = 100,  // Default width of 100px
+  height = 100  // Default height of 100px
+}) => {
   return (
-    <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-    <Image
-     boxSize="80px"
-     objectFit={"contain"}
-     src="/slicescoutlogo.png"
-     alt="Slice Scout Footer Logo"
-    />
-  </Flex>
+    <Link href="/">
+      <Image 
+        src={SliceScoutLogo.src} 
+        alt="Slice Scout Logo" 
+        width={width}
+        height={height}
+        objectFit="contain"
+        cursor="pointer"
+      />
+    </Link>
   )
 }
 
@@ -38,20 +44,22 @@ const SocialButton = ({
 }) => {
   return (
     <chakra.button
-      bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-      rounded={"full"}
+      bg={'whiteAlpha.100'}
+      rounded={'full'}
       w={8}
       h={8}
-      cursor={"pointer"}
-      as={"a"}
+      cursor={'pointer'}
+      as={'a'}
       href={href}
-      display={"inline-flex"}
-      alignItems={"center"}
-      justifyContent={"center"}
-      transition={"background 0.3s ease"}
+      display={'inline-flex'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      transition={'background 0.3s ease'}
       _hover={{
-        bg: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
-      }}>
+        bg: 'whiteAlpha.200',
+      }}
+      color="white"
+    >
       <VisuallyHidden>{label}</VisuallyHidden>
       {children}
     </chakra.button>
@@ -61,60 +69,76 @@ const SocialButton = ({
 export default function Footer() {
   return (
     <Box
-      bg={"rgb(242,240,239)"}
-      color={"rgb(0, 0, 0)"}>
+      bg={"darkred"}
+      color={"white"}
+    >
       <Container
-        as={Stack}
-        maxW={"6xl"}
+        maxW={'6xl'}
         py={4}
-        spacing={4}
-        justify={"center"}
-        align={"center"}>
-        <Logo />
-        <Stack direction={"row"} spacing={6}>
-          <Box as="a" href={"#"} >
-            Home
-          </Box>
-          <Box as="a" href={"#"}>
-            About Us
-          </Box>
-          <Box as="a" href={"#"}>
-            Account
-          </Box>
-          <Box as="a" href={"#"}>
-            FAQ
-          </Box>
-          <Box as="a" href={"#"}>
-            Contact
-          </Box>
-        </Stack>
-      </Container>
+      >
+        <Flex 
+          justifyContent="center" 
+          mb={4}
+        >
+          <Button 
+            as="a" 
+            href="/pages/submit-form" 
+            colorScheme="orange"
+          >
+            Sourced out a new Location or need to edit a wrong location?
+          </Button>
+        </Flex>
 
-      <Box
-        borderTopWidth={1}
-        borderStyle={"solid"}
-        borderColor={"rgb(53, 33, 0)"}
-        bg={"rgb(127, 43, 10)"}
-        color={"rgb(235, 235, 235)"}>
-        <Container
-          as={Stack}
-          maxW={"6xl"}
-          py={4}
-          direction={{ base: "column", md: "row" }}
-          spacing={4}
-          justify={{ base: "center", md: "space-between" }}
-          align={{ base: "center", md: "center" }}>
-          <Text fontSize="sm">© 2024 Slice Scout</Text>
-          <Stack direction={"row"} spacing={6}>
-            <SocialButton label={"Twitter"} href={"#"}>
-              <FaTwitter />
-            </SocialButton>
-            <SocialButton label={"Instagram"} href={"#"}>
-              <FaInstagram />
-            </SocialButton>
-          </Stack>
-        </Container>
-      </Box>
+        <Flex 
+          justifyContent="center" 
+          alignItems="center" 
+          gap={8}
+        >
+          {/* First Container - Navigation and Social */}
+          <Flex 
+            direction="column" 
+            align="center" 
+            maxW="300px" 
+            w="full"
+          >
+            <Flex 
+              direction={{ base: 'column', md: 'row' }} 
+              gap={4} 
+              justifyContent={'center'}
+              textAlign={'center'}
+              mb={4}
+            >
+              <Link href="/">Home</Link>
+              <Link href="/pages/about">About Us</Link>
+              <Link href="/pages/profile">Account</Link>
+              <Link href="/faq">FAQ</Link>
+            </Flex>
+
+            <Stack direction={'row'} spacing={6} mb={4}>
+              <SocialButton label={'Twitter'} href={'#'}>
+                <FaTwitter />
+              </SocialButton>
+              <SocialButton label={'Instagram'} href={'#'}>
+                <FaInstagram />
+              </SocialButton>
+            </Stack>
+
+            <Text fontSize={'sm'} textAlign={'center'}>
+              © 2024 Slice Scout
+            </Text>
+          </Flex>
+
+          {/* Second Container - Logo */}
+          <Flex 
+            direction="column" 
+            align="center" 
+            maxW="300px" 
+            w="full"
+          >
+            <Logo width={150} height={150} />
+          </Flex>
+        </Flex>
+      </Container>
     </Box>
   )
 }

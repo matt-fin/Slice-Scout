@@ -1,5 +1,5 @@
 export type Pizzeria = {
-    id: number;
+    id: bigint;
     name: string;
     location: Location;
 }

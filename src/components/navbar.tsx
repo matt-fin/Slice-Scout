@@ -15,9 +15,36 @@ import {
   CloseIcon,
 } from "@chakra-ui/icons"
 import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { UUID } from "crypto";
+import { clientConnection } from "@/utils/supabase/server";
+
+const supabase = await clientConnection();
 
 export default function Navbar() {
+  
+  const router = useRouter();  // Create a router instance to handle redirection
+  //defaults to signed out
+  const [signedIn, setSignedIn] = useState(false);
 
+  //signs user out (revokes JWT)
+  const signout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  }
+
+  //checks current state of session
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      setSignedIn(true);
+    }
+    else if (event === 'SIGNED_OUT') {
+      setSignedIn(false);
+    }
+  })
+
+  
   return (
     <Box>
       <Flex
@@ -31,7 +58,7 @@ export default function Navbar() {
         px={{ base: 4 }}
         borderBottom={2}
         borderStyle={"solid"}
-        borderColor={useColorModeValue("gray.100", "gray.900")}
+        borderColor={useColorModeValue("red.200", "red.400")}
         align={"center"}
         zIndex={3000}>
         <Flex justify={{ base: "center" }}>
@@ -51,29 +78,40 @@ export default function Navbar() {
           justify={"flex-end"}
           direction={"row"}
           spacing={6}>
-          <Link href="/pages/about">
-            <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
-              About
-            </Button>
-          </Link>
-          <Link href="/pages/login">
-            <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/pages/login">
-            <Button
-              display={{ base: "none", md: "inline-flex" }}
-              fontSize={"md"}
-              fontWeight={600}
-              color={"white"}
-              bg={"red.400"}
-              _hover={{
-                bg: "red.300",
-              }}>
-              Sign Up
-            </Button>
-          </Link>
+          {signedIn ?
+            <>
+              <Text paddingTop="10px">Hello, {}</Text>
+              <Link href="/pages/profile">
+                <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
+                  My Profile
+                </Button>
+              </Link>
+              <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px" onClick={signout}>
+                Sign Out
+              </Button>
+            </>
+            :
+            <>
+              <Link href="/pages/about">
+                <Button fontSize={"md"} fontWeight={400} variant={"link"} paddingTop="10px">
+                  About
+                </Button>
+              </Link>
+              <Link href="/pages/login">
+                <Button
+                  display={{ base: "none", md: "inline-flex" }}
+                  fontSize={"md"}
+                  fontWeight={600}
+                  color={"white"}
+                  bg={"red.400"}
+                  _hover={{
+                    bg: "red.300",
+                  }}>
+                  Sign Up/In
+                </Button>
+              </Link>
+            </>
+          }
         </Stack>
       </Flex>
     </Box>

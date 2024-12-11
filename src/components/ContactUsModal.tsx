@@ -16,25 +16,25 @@ import {
   Box,
   Text
 } from "@chakra-ui/react"
-import { useState } from "react"
-import { useForm } from 'react-hook-form';
+import { useState, useEffect, useRef } from "react"
 
 export default function ContactUsModal({isOpen, onClose}) {
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [recipientEmail, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  const nameInputRef = useRef(null);
+
   const handleFormSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await fetch('/pages/api/ticketemail', {
+        const response = await fetch('/api/ticketemail', {
           method: "POST",
           headers: {
             "Content-Type": 'application/json',
           },
-          body: JSON.stringify({ name, email, message }),
+          body: JSON.stringify({ name, recipientEmail, message }),
         });
   
         if (response.ok) {
@@ -51,12 +51,23 @@ export default function ContactUsModal({isOpen, onClose}) {
   };
 
   const handleFormClosure = () => {
-    setName("");
-    setEmail("");
-    setMessage("");
-    setIsSubmitted(false);
+    if (isSubmitted || (name === "" && recipientEmail === "" && message === "")) {
+      // Reset if submitted or all fields are empty
+      setName("");
+      setEmail("");
+      setMessage("");
+      setIsSubmitted(false);
+    }
     onClose();
-  }
+  };
+
+  // Focus input when the modal opens
+  useEffect(() => {
+    if (isOpen && !isSubmitted) {
+      nameInputRef.current?.focus();
+    }
+  }, [isOpen, isSubmitted]);
+
   
   return (
     
@@ -71,8 +82,8 @@ export default function ContactUsModal({isOpen, onClose}) {
       />
       <ModalContent 
         position="fixed"
-        maxWidth={{ base: "60vw" }} 
-        minWidth={{ base: "40vw" }}
+        maxWidth={{ base: "40vw" }} 
+        minWidth={{ base: "30vw" }}
         width="auto"
         height="auto"
         maxHeight={{ base: "70vh" }}
@@ -98,7 +109,7 @@ export default function ContactUsModal({isOpen, onClose}) {
             <Box textAlign="center">
               <Text fontSize="30px">Thank You, {name}!</Text>
               <br/>
-              <Text>Your message has been received. We will get back to you within 2 business days.</Text>
+              <Text>Your message has been received. We will get back to you within 2 business days. Please check your email for a confirmation. Refresh this page if you would like to send a new message.</Text>
             </Box>
           ) : (
           <form onSubmit={handleFormSubmit}>
@@ -110,7 +121,7 @@ export default function ContactUsModal({isOpen, onClose}) {
           
             <FormControl id="email" mb={4} isRequired>
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="Your Email" value={email}
+              <Input type="email" placeholder="Your Email" value={recipientEmail}
                 onChange={(e) => setEmail(e.target.value)} />
             </FormControl>
           

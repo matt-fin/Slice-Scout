@@ -5,8 +5,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
-import { Caveat } from "next/font/google";
-import { Mansalva } from "next/font/google";
+import { Caveat, Mansalva, Handlee } from "next/font/google";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -18,6 +17,12 @@ const mansalva = Mansalva({
   weight: "400",
   subsets: ["latin"]
 });
+
+const handlee = Handlee({
+  variable: "--font-handlee",
+  weight: "400",
+  subsets: ["latin"]
+})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,13 +48,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${caveat.variable} ${mansalva.variable}`} lang="en">
+    <html className={`${caveat.variable} ${handlee.variable}`} lang="en">
       <body>
-        <Providers>
-          <Navbar/>
-          {children}
-          <Footer/>
-        </Providers>
+          <Providers>
+            <Navbar/>
+            {children}
+            <Footer/>
+          </Providers>
       </body>
     </html>
   );
