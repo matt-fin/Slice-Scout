@@ -37,8 +37,6 @@ import { Line } from 'react-chartjs-2';
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
 import { createClient } from "@supabase/supabase-js";
-// Import a default or custom icon if you want
-// Example: const pizzaIcon = new Icon({ iconUrl: '/pizza_mapicon.png', iconSize: [25, 41] });
 
 // Register chart components
 ChartJS.register(
@@ -53,8 +51,9 @@ ChartJS.register(
 
 const PriceIndicator = ({ price }) => {
   const bgColor = useColorModeValue("green.100", "green.900");
-  const textColor = useColorModeValue("green.800", "green.100");
-  
+  // textColor is defined but not used. If you need it, uncomment this line.
+  // const textColor = useColorModeValue("green.800", "green.100");
+
   const getColor = (level) => {
     const colors = ["green.300", "green.500", "green.700"];
     return colors[level - 1] || colors[0];
@@ -95,14 +94,15 @@ function PizzaCard({
   longitude,
   images = [],
   priceHistory = [],
-  latitude,
-  longitude
   demoMode = false
 }) {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
 
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 
   const [history, setHistory] = useState(priceHistory);
 
@@ -114,7 +114,7 @@ function PizzaCard({
   const [selectedPrice, setSelectedPrice] = useState("0.99");
   const [customPrice, setCustomPrice] = useState("");
 
-    // Demo mode data
+  // Demo mode data
   const demoData = {
     name: "Slice of Heaven Pizza",
     phone: "(555) 123-4567",
@@ -124,17 +124,19 @@ function PizzaCard({
     reviewsLink: "https://example.com/reviews",
     websiteLink: "https://example.com/pizza",
   };
-  
-    // Use demo data if demoMode is true
-  const displayData = demoMode ? demoData : {
-    name, 
-    phone, 
-    hours, 
-    address, 
-    price, 
-    reviewsLink, 
-    websiteLink
-  };
+
+  // Use demo data if demoMode is true
+  const displayData = demoMode
+    ? demoData
+    : {
+        name,
+        phone,
+        hours,
+        address,
+        price,
+        reviewsLink,
+        websiteLink,
+      };
 
   const openDetailModal = () => setIsDetailOpen(true);
   const closeDetailModal = () => setIsDetailOpen(false);
@@ -144,7 +146,7 @@ function PizzaCard({
     setCustomPrice("");
     setIsVoteModalOpen(true);
   };
-  
+
   const closeVoteModal = () => {
     setIsVoteModalOpen(false);
   };
@@ -154,28 +156,37 @@ function PizzaCard({
     if (isNaN(votedPrice)) return;
 
     const newEntry = {
-      date: new Date().toISOString().slice(0,10),
-      price: votedPrice
+      date: new Date().toISOString().slice(0, 10),
+      price: votedPrice,
     };
 
-    //checks if price with associated pizzeria exists
+    // checks if price with associated pizzeria exists
     const { data, error } = await supabase
-    .from('prices')
-    .select()
-    .eq('pizzeria_id', id)
-    .eq('price', votedPrice);
-    
-    //price exists for current pizzeria
-    if (data !== null && data.length) {
-      const {error} = await supabase.rpc('increment_price', { row_id: data[0]["id"] })
-    }
-    else {
-      const { error } = await supabase
-                          .from('prices')
-                          .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
+      .from("prices")
+      .select()
+      .eq("pizzeria_id", id)
+      .eq("price", votedPrice);
+
+    if (error) {
+      console.error(error);
     }
 
-    setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date)));
+    // price exists for current pizzeria
+    if (data !== null && data.length > 0) {
+      const { error: incrementError } = await supabase.rpc("increment_price", {
+        row_id: data[0]["id"],
+      });
+      if (incrementError) console.error(incrementError);
+    } else {
+      const { error: insertError } = await supabase
+        .from("prices")
+        .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
+      if (insertError) console.error(insertError);
+    }
+
+    setHistory((prev) =>
+      [...prev, newEntry].sort((a, b) => new Date(a.date) - new Date(b.date))
+    );
     console.log(`User voted for $${votedPrice} for ${name}`);
 
     closeVoteModal();
@@ -185,13 +196,13 @@ function PizzaCard({
     labels: history.map((entry) => entry.date),
     datasets: [
       {
-        label: 'Slice Price ($)',
+        label: "Slice Price ($)",
         data: history.map((entry) => entry.price),
-        borderColor: 'rgba(255,99,132,1)',
-        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: "rgba(255,99,132,1)",
+        backgroundColor: "rgba(255,99,132,0.2)",
         tension: 0.1,
         pointRadius: 3,
-      }
+      },
     ],
   };
 
@@ -199,13 +210,13 @@ function PizzaCard({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'bottom' },
-      title: { display: true, text: 'Slice Price Over Time' },
+      legend: { position: "bottom" },
+      title: { display: true, text: "Slice Price Over Time" },
     },
     scales: {
-      x: { title: { display: true, text: 'Date' } },
-      y: { title: { display: true, text: 'Price ($)' } }
-    }
+      x: { title: { display: true, text: "Date" } },
+      y: { title: { display: true, text: "Price ($)" } },
+    },
   };
 
   const latestPrice = history.length > 0 ? history[history.length - 1].price : null;
@@ -242,7 +253,6 @@ function PizzaCard({
         )}
         <PriceIndicator price={displayData.price} />
 
-
         <VStack align="start" spacing={3}>
           <Text fontSize="xl" fontWeight="semibold">
             {displayData.name}
@@ -250,7 +260,9 @@ function PizzaCard({
 
           <HStack>
             <PhoneIcon />
-            <Text textDecor={"underline"}><a href={`tel:${displayData.phone}`}>{displayData.phone}</a></Text>
+            <Text textDecor={"underline"}>
+              <a href={`tel:${displayData.phone}`}>{displayData.phone}</a>
+            </Text>
           </HStack>
 
           <HStack>
@@ -260,62 +272,66 @@ function PizzaCard({
 
           <HStack>
             <InfoIcon />
-              <a 
-                href={`https://www.google.com/maps?q=${encodeURIComponent(displayData.address)}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-            <Text textDecor={"underline"}>{displayData.address}</Text>
-              </a>
-            </HStack>
+            <a
+              href={`https://www.google.com/maps?q=${encodeURIComponent(
+                displayData.address
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Text textDecor={"underline"}>{displayData.address}</Text>
+            </a>
+          </HStack>
 
-            <HStack spacing={4} mt={4}>
-              <Button as="a" href={reviewsLink} target="_blank" colorScheme="blue" size="sm">
-                Reviews
-              </Button>
-              <Button as="a" href={websiteLink} target="_blank" colorScheme="green" size="sm">
-                Website
-              </Button>
-            </HStack>
+          <HStack spacing={4} mt={4}>
+            <Button as="a" href={reviewsLink} target="_blank" colorScheme="blue" size="sm">
+              Reviews
+            </Button>
+            <Button as="a" href={websiteLink} target="_blank" colorScheme="green" size="sm">
+              Website
+            </Button>
+          </HStack>
         </VStack>
       </Box>
 
       {/* Main Detail Modal */}
-      <Modal 
-        isOpen={isDetailOpen} 
-        onClose={closeDetailModal} 
-        size="6xl" 
-        isCentered 
+      <Modal
+        isOpen={isDetailOpen}
+        onClose={closeDetailModal}
+        size="6xl"
+        isCentered
         scrollBehavior="inside"
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{name} Details</ModalHeader>
           <ModalBody overflowY="auto" maxH="80vh">
-            <VStack align="stretch" spacing={6}>
-              {/* Info Section */}
-              <Box>
-                <Text fontSize="2xl" fontWeight="bold" mb={2}>
-                  {name}
-                </Text>
-                <HStack spacing={4}>
-                  <HStack>
-                    <PhoneIcon />
-                    <Text>{phone}</Text>
-                  </HStack>
-                  <HStack>
-                    <TimeIcon />
-                    <Text>{hours}</Text>
-                  </HStack>
-                  <HStack>
-                    <InfoIcon />
-                    <a 
-                      href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                    <Text textDecor={"underline"}>{address}</Text>
-                    </a>
+            <HStack align="start" spacing={6}>
+              <VStack align="stretch" spacing={6} flex="2">
+                {/* Info Section */}
+                <Box>
+                  <Text fontSize="2xl" fontWeight="bold" mb={2}>
+                    {name}
+                  </Text>
+                  <HStack spacing={4}>
+                    <HStack>
+                      <PhoneIcon />
+                      <Text>{phone}</Text>
+                    </HStack>
+                    <HStack>
+                      <TimeIcon />
+                      <Text>{hours}</Text>
+                    </HStack>
+                    <HStack>
+                      <InfoIcon />
+                      <a
+                        href={`https://www.google.com/maps?q=${encodeURIComponent(address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Text textDecor={"underline"}>{address}</Text>
+                      </a>
+                    </HStack>
                   </HStack>
 
                   <HStack spacing={4} mt={4}>
@@ -327,8 +343,6 @@ function PizzaCard({
                     </Button>
                   </HStack>
                 </Box>
-
-
 
                 {/* Chart and Price History Section */}
                 <Box height="300px">
@@ -365,7 +379,7 @@ function PizzaCard({
                   >
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                      attribution='&copy; OpenStreetMap contributors'
                     />
                     <Marker position={[latitude, longitude]}>
                     </Marker>
