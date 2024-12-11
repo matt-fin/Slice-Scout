@@ -20,29 +20,37 @@ import { useRouter } from "next/navigation";
 import { UUID } from "crypto";
 import { clientConnection } from "@/utils/supabase/server";
 
-const supabase = await clientConnection();
-
 export default function Navbar() {
-  
+
   const router = useRouter();  // Create a router instance to handle redirection
   //defaults to signed out
   const [signedIn, setSignedIn] = useState(false);
+  const [supabase, setSupabase] = useState(null);
 
-  //signs user out (revokes JWT)
+  useEffect(() => {
+    const initSupabase = async () => {
+      const supabase = await clientConnection();
+      setSupabase(supabase);
+
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_IN") {
+          setSignedIn(true);
+        } else if (event === "SIGNED_OUT") {
+          setSignedIn(false);
+        }
+      });
+    };
+
+    initSupabase();
+  }, []);
+
+  // Sign out function
   const signout = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
-  //checks current state of session
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-      setSignedIn(true);
+    if (supabase) {
+      await supabase.auth.signOut();
+      router.push("/");
     }
-    else if (event === 'SIGNED_OUT') {
-      setSignedIn(false);
-    }
-  })
+  };
 
   
   return (

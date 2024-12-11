@@ -14,7 +14,6 @@ import {
     Heading,
     useToast
 } from "@chakra-ui/react";
-//import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ContactUsButton from "@/components/ContactUsButton";
 import { handleEnterKey } from "@/utils/handleEnterKeyEvents";

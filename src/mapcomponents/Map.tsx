@@ -13,7 +13,7 @@ import * as T from '../libs/types'
 
 interface MapProps {
     readonly pizzerias: T.Pizzeria[];
-    readonly handlePizzeriaSelection: (id: number) => void;
+    readonly handlePizzeriaSelection: (id: bigint) => void;
     readonly centerCoordinates: [number, number];
     readonly iconUrl?: string;
 }

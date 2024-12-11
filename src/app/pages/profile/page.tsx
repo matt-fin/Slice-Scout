@@ -16,13 +16,12 @@ import {
   IconButton,
   Select,
 } from "@chakra-ui/react";
-import { SearchIcon, SettingsIcon, StarIcon } from "@chakra-ui/icons";
+import { SearchIcon, StarIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 import ContactUsButton from "@/components/ContactUsButton";
 import { clientConnection } from "@/utils/supabase/server";
 
-const supabase = await clientConnection();
-const user = await supabase.auth.getUser();
 
 // Mock data
 const favoritedShops = [
@@ -32,15 +31,55 @@ const favoritedShops = [
 ];
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRating, setFilterRating] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchSessionAndUserData = async () => {
+      const supabase = await clientConnection();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        router.push("/pages/login");
+        return;
+      }
+
+      // Fetch user data after session is confirmed
+      const { data: userData, error: dataError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (dataError) {
+        console.error("Error fetching user data:", dataError.message);
+      } else {
+        setUserData(userData);
+      }
+
+      setLoading(false);
+    };
+
+    fetchSessionAndUserData();
+  }, [router]);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (!userData) {
+    return <Text>Error fetching user data.</Text>;
+  }
   const filteredShops = favoritedShops.filter(shop => {
     return (
       shop.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (!filterRating || shop.rating >= parseFloat(filterRating))
     );
   });
+
 
   return (
     <Flex direction="row" minH="100vh" bg="gray.50" pt={"75px"}>
@@ -54,7 +93,7 @@ export default function ProfilePage() {
         flexDirection="column"
         alignItems="flex-start"
       >
-        <Heading as="h2" size="md" mb={4}>
+        <Heading as="h2" size="xl" mb={4}>
           Menu
         </Heading>
         <Button variant="link" color="white" my={2}>
@@ -85,15 +124,14 @@ export default function ProfilePage() {
         >
           <Avatar
             size="xl"
-            src="/path-to-profile-pic.jpg"
-            name="Username"
+            name={userData.username}
             mb={4}
           />
           <Heading as="h2" size="lg">
-            Username
+            {userData.username}
           </Heading>
           <Text color="gray.500" mt={2}>
-            {user.data.user.id}
+            {userData.id}
           </Text>
           <Text mt={4} fontSize="md">
             Bio: Passionate about finding the best pizza around the world and

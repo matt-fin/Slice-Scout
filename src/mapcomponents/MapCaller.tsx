@@ -3,7 +3,7 @@ import * as T from "../libs/types";
 
 interface MapCallerProps {
   pizzerias: T.Pizzeria[];
-  handlePizzeriaSelection: (id: number) => void;
+  handlePizzeriaSelection: (id: bigint) => void;
   centerCoordinates: [number, number]; // Center coordinates for the map
 }
 

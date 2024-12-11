@@ -134,9 +134,7 @@ export default function Results() {
         console.log(data.results[0].lat, data.results[0].lon);
 
         if (data.results && data.results.length > 0) {
-          const lat = data.results[0].lat;
-          const lon = data.results[0].lon;
-          setCenterCoordinates([lat, lon]); // Update the map center coordinates
+          setCenterCoordinates([data.results[0].lat, data.results[0].lon]); // Update the map center coordinates
         }
       };
 
@@ -147,7 +145,7 @@ export default function Results() {
     }, [searchParams, allPizzerias]);
 
     
-    const handlePizzeriaSelection = (id: number) => {
+    const handlePizzeriaSelection = (id: bigint) => {
         console.log("Selected Pizzeria ID:", id);
     };
 

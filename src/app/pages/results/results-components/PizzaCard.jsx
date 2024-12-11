@@ -82,7 +82,7 @@ const PriceIndicator = ({ price }) => {
 };
 
 function PizzaCard({
-  key,
+  id,
   name,
   phone,
   hours,
@@ -116,6 +116,7 @@ function PizzaCard({
 
   // Demo mode data
   const demoData = {
+    id: "165",
     name: "Slice of Heaven Pizza",
     phone: "(555) 123-4567",
     hours: "10 AM - 9 PM",
@@ -129,6 +130,7 @@ function PizzaCard({
   const displayData = demoMode
     ? demoData
     : {
+        id,
         name,
         phone,
         hours,
@@ -180,7 +182,7 @@ function PizzaCard({
     } else {
       const { error: insertError } = await supabase
         .from("prices")
-        .insert({ pizzeria_id: key, price: votedPrice, votes: 1 });
+        .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
       if (insertError) console.error(insertError);
     }
 
@@ -254,10 +256,14 @@ function PizzaCard({
         <PriceIndicator price={displayData.price} />
 
         <VStack align="start" spacing={3}>
-          <Text fontSize="xl" fontWeight="semibold">
-            {displayData.name}
-          </Text>
-
+          <HStack spacing={4}>
+            <Text fontSize="xl" fontWeight="semibold">
+              {displayData.name}
+            </Text>
+            <Text fontSize="sm" textColor={"#808080"}>
+              Pizzeria#{displayData.id}
+            </Text>
+          </HStack>
           <HStack>
             <PhoneIcon />
             <Text textDecor={"underline"}>
