@@ -34,8 +34,13 @@ import {
   Legend
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { Icon } from "leaflet";
+import { createClient } from "@supabase/supabase-js";
+// Import a default or custom icon if you want
+// Example: const pizzaIcon = new Icon({ iconUrl: '/pizza_mapicon.png', iconSize: [25, 41] });
 
-//Code
+// Register chart components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -78,6 +83,7 @@ const PriceIndicator = ({ price }) => {
 };
 
 function PizzaCard({
+  id,
   name,
   phone,
   hours,
@@ -89,18 +95,21 @@ function PizzaCard({
   longitude,
   images = [],
   priceHistory = [],
+  latitude,
+  longitude
   demoMode = false
 }) {
   const cardBg = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.100");
 
-  // Keep price history in a local state so we can update it.
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
   const [history, setHistory] = useState(priceHistory);
 
-  // State for the detail modal
+  // Detail modal states
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
-  // State for the separate vote modal
+  // Vote modal states
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState("0.99");
   const [customPrice, setCustomPrice] = useState("");
@@ -128,9 +137,7 @@ function PizzaCard({
   };
 
   const openDetailModal = () => setIsDetailOpen(true);
-  const closeDetailModal = () => {
-    setIsDetailOpen(false);
-  };
+  const closeDetailModal = () => setIsDetailOpen(false);
 
   const openVoteModal = () => {
     setSelectedPrice("0.99");
@@ -142,21 +149,34 @@ function PizzaCard({
     setIsVoteModalOpen(false);
   };
 
-  const handleVote = () => {
+  const handleVote = async () => {
     const votedPrice = parseFloat(customPrice || selectedPrice);
     if (isNaN(votedPrice)) return;
 
-    // Add the new entry to the price history
     const newEntry = {
-      date: new Date().toISOString().slice(0,10), // e.g. "2024-06-01"
+      date: new Date().toISOString().slice(0,10),
       price: votedPrice
     };
 
-    setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date))); 
-    // Sorting ensures the chart remains chronological if needed
+    //checks if price with associated pizzeria exists
+    const { data, error } = await supabase
+    .from('prices')
+    .select()
+    .eq('pizzeria_id', id)
+    .eq('price', votedPrice);
+    
+    //price exists for current pizzeria
+    if (data !== null && data.length) {
+      const {error} = await supabase.rpc('increment_price', { row_id: data[0]["id"] })
+    }
+    else {
+      const { error } = await supabase
+                          .from('prices')
+                          .insert({ pizzeria_id: id, price: votedPrice, votes: 1 });
+    }
 
+    setHistory(prev => [...prev, newEntry].sort((a,b) => new Date(a.date) - new Date(b.date)));
     console.log(`User voted for $${votedPrice} for ${name}`);
-    // Here you could also make an API call to persist this data in your backend
 
     closeVoteModal();
   };
@@ -179,29 +199,16 @@ function PizzaCard({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom',
-      },
-      title: {
-        display: true,
-        text: 'Slice Price Over Time',
-      },
+      legend: { position: 'bottom' },
+      title: { display: true, text: 'Slice Price Over Time' },
     },
     scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Date'
-        }
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Price ($)'
-        }
-      }
+      x: { title: { display: true, text: 'Date' } },
+      y: { title: { display: true, text: 'Price ($)' } }
     }
   };
+
+  const latestPrice = history.length > 0 ? history[history.length - 1].price : null;
 
   return (
     <>
@@ -219,7 +226,22 @@ function PizzaCard({
         onClick={openDetailModal}
         _hover={{ boxShadow: "md" }}
       >
+        {latestPrice !== null && (
+          <Box
+            position="absolute"
+            top="4px"
+            right="4px"
+            bg="orange.200"
+            px={2}
+            py={1}
+            borderRadius="md"
+            fontWeight="bold"
+          >
+            ${latestPrice.toFixed(2)}
+          </Box>
+        )}
         <PriceIndicator price={displayData.price} />
+
 
         <VStack align="start" spacing={3}>
           <Text fontSize="xl" fontWeight="semibold">
@@ -304,59 +326,55 @@ function PizzaCard({
                       Website
                     </Button>
                   </HStack>
-                </HStack>
-              </Box>
+                </Box>
 
-              <Divider />
 
-              {/* Images Section */}
-              <Box>
-                <Text fontSize="xl" fontWeight="semibold" mb={2}>
-                  Images
-                </Text>
-                <HStack spacing={4} overflowX="auto">
-                  {images.length > 0 ? (
-                    images.map((imgSrc, i) => (
-                      <Image
-                        key={i}
-                        src={imgSrc}
-                        alt={`${name} image ${i + 1}`}
-                        boxSize="200px"
-                        objectFit="cover"
-                        borderRadius="md"
-                      />
-                    ))
+
+                {/* Chart and Price History Section */}
+                <Box height="300px">
+                  <Text fontSize="xl" fontWeight="semibold" mb={2}>
+                    Slice Price History
+                  </Text>
+                  {history.length ? (
+                    <Box width="100%" height="100%">
+                      <Line data={chartData} options={chartOptions} />
+                    </Box>
                   ) : (
-                    <Text>No images available</Text>
+                    <Text>No price history available</Text>
                   )}
-                </HStack>
-              </Box>
+                </Box>
 
-              <Divider />
+                <Divider />
 
-              {/* Chart and Price History Section */}
-              <Box height="300px">
-                <Text fontSize="xl" fontWeight="semibold" mb={2}>
-                  Slice Price History
-                </Text>
-                {history.length ? (
-                  <Box width="100%" height="100%">
-                    <Line data={chartData} options={chartOptions} />
-                  </Box>
+                {/* Vote on Slice Price Button */}
+                <Box>
+                  <Button colorScheme="orange" onClick={openVoteModal}>
+                    Vote on Slice Price
+                  </Button>
+                </Box>
+              </VStack>
+
+              {/* Map Section - Right Side */}
+              <Box flex="1" minWidth="300px" height="600px" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                {latitude && longitude ? (
+                  <MapContainer
+                    center={[latitude, longitude]}
+                    zoom={15}
+                    scrollWheelZoom={false}
+                    style={{ width: '100%', height: '100%' }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    />
+                    <Marker position={[latitude, longitude]}>
+                    </Marker>
+                  </MapContainer>
                 ) : (
-                  <Text>No price history available</Text>
+                  <Text>No coordinates available for mapping</Text>
                 )}
               </Box>
-
-              <Divider />
-
-              {/* Vote on Slice Price Button */}
-              <Box>
-                <Button colorScheme="orange" onClick={openVoteModal}>
-                  Vote on Slice Price
-                </Button>
-              </Box>
-            </VStack>
+            </HStack>
           </ModalBody>
           <ModalFooter>
             <Button onClick={closeDetailModal}>Close</Button>
