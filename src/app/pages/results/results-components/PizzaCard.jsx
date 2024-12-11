@@ -157,10 +157,10 @@ function PizzaCard({
     const votedPrice = parseFloat(customPrice || selectedPrice);
     if (isNaN(votedPrice)) return;
 
-    const newEntry = {
-      date: new Date().toISOString().slice(0, 10),
-      price: votedPrice,
-    };
+    //const newEntry = {
+    //  date: new Date().toISOString().slice(0, 10),
+    //  price: votedPrice,
+    //};
 
     // checks if price with associated pizzeria exists
     const { data, error } = await supabase
@@ -186,9 +186,31 @@ function PizzaCard({
       if (insertError) console.error(insertError);
     }
 
-    setHistory((prev) =>
-      [...prev, newEntry].sort((a, b) => new Date(a.date) - new Date(b.date))
-    );
+    //purely for demo purposes. Makes charts react immediately by generating new mean price for that data:
+    await supabase.rpc("insert_mean_price", {
+      pizz_id: id,
+    });
+
+    const {data: inserted_row} = await supabase
+      .from("mean_prices")
+      .select()
+      .eq("pizzeria_id", id)
+      .order("id", {ascending: false})
+      .limit(1);
+
+      console.log(inserted_row)
+
+      const newEntry = {
+        price: inserted_row[0].mean_price,
+        date: inserted_row[0].timestamp.substring(0, 10)
+      };
+
+      setHistory((prev) => 
+        [...prev, newEntry].sort((a, b) => new Date(a.date) - new Date(b.date))
+      );
+    //setHistory((prev) =>
+    //  [...prev, newEntry].sort((a, b) => new Date(a.date) - new Date(b.date))
+    //);
     console.log(`User voted for $${votedPrice} for ${name}`);
 
     closeVoteModal();
