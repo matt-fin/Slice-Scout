@@ -11,6 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react"
 import { ReactElement } from "react"
+import PizzaCard from "@/app/pages/results/results-components/PizzaCard"
 
 interface CardProps {
   heading: string
@@ -63,13 +64,20 @@ export default function Features() {
             width={"600"}
             height={"700"}
           />
-          <Card
-            heading={"Heading"}
-            description={"Pizza card demo will go here."}
-            href={"#"}
-            width={"400"}
-            height={"700"}
-          />
+          <Box
+            maxW={"400"}
+            minH={"700"}
+            w={"full"}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={5}
+          >
+            <Heading size="md" mb={4}>Pizza Card Demo</Heading>
+            <PizzaCard demoMode={true} />
+            <br/>
+            <PizzaCard demoMode={true} />
+          </Box>
         </Flex>
       </Container>
     </Box>
