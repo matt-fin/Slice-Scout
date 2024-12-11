@@ -82,7 +82,7 @@ const PriceIndicator = ({ price }) => {
 };
 
 function PizzaCard({
-  id,
+  key,
   name,
   phone,
   hours,
