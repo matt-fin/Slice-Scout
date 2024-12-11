@@ -2,46 +2,14 @@
 
 import {
   Box,
-  Button,
   Container,
   Flex,
   Heading,
   Stack,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react"
-import { ReactElement } from "react"
+import MapWrapper from "@/mapcomponents/MapWrapper"
 import PizzaCard from "@/app/pages/results/results-components/PizzaCard"
-
-interface CardProps {
-  heading: string
-  description: string
-  href: string
-  width: string
-  height: string
-}
-
-const Card = ({ heading, description, href, width, height }: CardProps) => {
-  return (
-    <Box
-      maxW={width}
-      minH={height}
-      w={"full"}
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      p={5}>
-      <Stack align={"start"} spacing={2}>
-        <Box mt={2}>
-          <Heading size="md">{heading}</Heading>
-          <Text mt={1} fontSize={"sm"}>
-            {description}
-          </Text>
-        </Box>
-      </Stack>
-    </Box>
-  )
-}
 
 export default function Features() {
   return (
@@ -57,13 +25,23 @@ export default function Features() {
 
       <Container maxW={"10000px"} maxH={{base:"100%", md: "1000px"}} mt={12}>
         <Flex flexWrap="wrap" gridGap={6} justify="center">
-          <Card
-            heading={"Heading"}
-            description={"Map will go here."}
-            href={"#"}
-            width={"600"}
-            height={"700"}
-          />
+          <Box
+            maxW={"400"}
+            minH={"700"}
+            w={"full"}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={5}
+          >
+            <Heading size="md" mb={4}>Pizzeria Map</Heading>
+            <MapWrapper 
+              width="100%" 
+              height="400px" 
+              centerCoordinates={[40.7580, -73.9855]} 
+            />
+          </Box>
+          
           <Box
             maxW={"400"}
             minH={"700"}

@@ -63,7 +63,7 @@ const FloatingPizzaIcon = ({
 
 export default function About() {
   return (
-    <Box position="relative" overflow="hidden" bg="gray.50">
+    <Box position="relative" overflow="hidden" bg="#fcfaeb">
       {/* Centered Gradient Background */}
       <Box position="relative" width="90%" mx="auto" overflow="hidden">
         <Box
