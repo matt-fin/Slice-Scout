@@ -50,7 +50,7 @@ export default function Map({pizzerias, handlePizzeriaSelection, centerCoordinat
     return (
     <MapContainer
         center={centerCoordinates} // Times Square coordinates
-        zoom={12}
+        zoom={17}
         scrollWheelZoom={true}
         style={{ height: "600px", width: "400px" }}
     >
