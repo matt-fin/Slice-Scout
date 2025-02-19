@@ -278,7 +278,6 @@ function PizzaCard({
             ${latestPrice.toFixed(2)}
           </Box>
         )}
-        <PriceIndicator price={displayData.price} />
 
         <VStack align="start" spacing={3}>
           <Text fontSize="xl" fontWeight="semibold">
